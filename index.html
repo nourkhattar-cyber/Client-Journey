@@ -3,28 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Client Journey BPMN - Stage 1</title>
+  <title>MMR / Peekaboo Client Journey</title>
   <style>
     :root {
-      --bg: #f4f7fb;
       --board: #ffffff;
-      --line: #8ea2b8;
-      --lane-border: #d7e0eb;
+      --line: #90a2b8;
+      --lane-border: #d8e0ea;
       --client-bg: #eef3fb;
       --mmr-bg: #f2fbf3;
-      --sales-bg: #fbf6ef;
+      --outcome-bg: #f6f1ff;
       --issues-bg: #fff8f8;
       --task-bg: #dff6e8;
       --task-border: #3aa56a;
-      --sales-task-bg: #e7f1ff;
-      --sales-task-border: #4f83d8;
+      --client-task-bg: #e8f1ff;
+      --client-task-border: #4f83d8;
+      --outcome-task-bg: #efe8ff;
+      --outcome-task-border: #8b69d8;
       --gateway-bg: #fff7d1;
       --gateway-border: #d88b06;
-      --issue-border: #ef6b6b;
       --issue-bg: #fff3f3;
-      --issue-text: #b53a3a;
+      --issue-border: #ef6b6b;
+      --issue-text: #b63a3a;
       --text: #243447;
-      --muted: #607082;
+      --muted: #627385;
       --shadow: 0 14px 30px rgba(31, 50, 81, 0.12);
     }
 
@@ -40,7 +41,7 @@
     }
 
     .page {
-      max-width: 2320px;
+      max-width: 3080px;
       margin: 0 auto;
       padding: 24px;
     }
@@ -68,7 +69,7 @@
     }
 
     .subtitle {
-      max-width: 1260px;
+      max-width: 1400px;
       margin: 0;
       font-size: 15px;
       line-height: 1.55;
@@ -81,10 +82,53 @@
       color: #6c7d91;
     }
 
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 22px 0 8px;
+    }
+
+    .roadmap-card {
+      padding: 14px 16px;
+      border: 1px solid #dbe4ef;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 8px 18px rgba(53, 74, 107, 0.06);
+    }
+
+    .roadmap-card.active {
+      border-color: #4f83d8;
+      background: #edf4ff;
+      box-shadow: 0 10px 22px rgba(79, 131, 216, 0.12);
+    }
+
+    .roadmap-stage {
+      margin-bottom: 6px;
+      color: #3563ae;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .roadmap-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .roadmap-text {
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
     .board {
       position: relative;
-      width: 2220px;
-      height: 930px;
+      width: 2940px;
+      height: 1020px;
       margin-top: 22px;
       overflow: hidden;
       border: 1px solid #dbe3ee;
@@ -102,24 +146,24 @@
 
     .lane.client {
       top: 0;
-      height: 150px;
+      height: 140px;
       background: var(--client-bg);
     }
 
     .lane.mmr {
-      top: 150px;
-      height: 270px;
+      top: 140px;
+      height: 430px;
       background: var(--mmr-bg);
     }
 
-    .lane.sales {
-      top: 420px;
-      height: 220px;
-      background: var(--sales-bg);
+    .lane.outcomes {
+      top: 570px;
+      height: 160px;
+      background: var(--outcome-bg);
     }
 
     .lane.issues {
-      top: 640px;
+      top: 730px;
       height: 290px;
       background: var(--issues-bg);
       border-bottom: 0;
@@ -145,21 +189,21 @@
 
     .lane-label.client {
       top: 0;
-      height: 150px;
+      height: 140px;
     }
 
     .lane-label.mmr {
-      top: 150px;
-      height: 270px;
+      top: 140px;
+      height: 430px;
     }
 
-    .lane-label.sales {
-      top: 420px;
-      height: 220px;
+    .lane-label.outcomes {
+      top: 570px;
+      height: 160px;
     }
 
     .lane-label.issues {
-      top: 640px;
+      top: 730px;
       height: 290px;
     }
 
@@ -185,17 +229,9 @@
       background: #dde5ef;
     }
 
-    .divider.one {
-      left: 590px;
-    }
-
-    .divider.two {
-      left: 1180px;
-    }
-
-    .divider.three {
-      left: 1710px;
-    }
+    .divider.one { left: 690px; }
+    .divider.two { left: 1450px; }
+    .divider.three { left: 2190px; }
 
     .divider-label {
       position: absolute;
@@ -207,17 +243,9 @@
       text-transform: uppercase;
     }
 
-    .divider-label.a {
-      left: 614px;
-    }
-
-    .divider-label.b {
-      left: 1205px;
-    }
-
-    .divider-label.c {
-      left: 1735px;
-    }
+    .divider-label.a { left: 714px; }
+    .divider-label.b { left: 1475px; }
+    .divider-label.c { left: 2215px; }
 
     .node {
       position: absolute;
@@ -250,10 +278,16 @@
       line-height: 1.35;
     }
 
-    .task.sales {
-      border-color: var(--sales-task-border);
-      background: var(--sales-task-bg);
+    .task.client {
+      border-color: var(--client-task-border);
+      background: var(--client-task-bg);
       box-shadow: 0 8px 18px rgba(79, 131, 216, 0.12);
+    }
+
+    .task.outcome {
+      border-color: var(--outcome-task-border);
+      background: var(--outcome-task-bg);
+      box-shadow: 0 8px 18px rgba(139, 105, 216, 0.12);
     }
 
     .task.small {
@@ -299,13 +333,8 @@
       z-index: 1;
     }
 
-    .line.h {
-      height: 3px;
-    }
-
-    .line.v {
-      width: 3px;
-    }
+    .line.h { height: 3px; }
+    .line.v { width: 3px; }
 
     .arrow-right::after,
     .arrow-down::after,
@@ -354,19 +383,14 @@
       z-index: 4;
     }
 
-    .connector-label.yes {
-      color: #16803f;
-    }
-
-    .connector-label.no {
-      color: #c83c3c;
-    }
+    .connector-label.yes { color: #16803f; }
+    .connector-label.no { color: #c83c3c; }
 
     .issues-grid {
       position: absolute;
       left: 130px;
-      top: 676px;
-      width: 1980px;
+      top: 766px;
+      width: 2680px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 18px 22px;
@@ -430,9 +454,14 @@
       background: var(--task-bg);
     }
 
-    .swatch.sales {
-      border: 2px solid var(--sales-task-border);
-      background: var(--sales-task-bg);
+    .swatch.client {
+      border: 2px solid var(--client-task-border);
+      background: var(--client-task-bg);
+    }
+
+    .swatch.outcome {
+      border: 2px solid var(--outcome-task-border);
+      background: var(--outcome-task-bg);
     }
 
     .swatch.gateway {
@@ -449,7 +478,7 @@
       background: var(--issue-bg);
     }
 
-    @media (max-width: 2260px) {
+    @media (max-width: 3000px) {
       .page {
         overflow-x: auto;
       }
@@ -459,199 +488,300 @@
 <body>
   <div class="page">
     <div class="header">
-      <span class="eyebrow">BPMN Client Journey</span>
-      <h1>Stage 1 - Client Inquiry (clear layout)</h1>
+      <span class="eyebrow">Approved Stage Model</span>
+      <h1>MMR / Peekaboo Client Journey</h1>
       <p class="subtitle">
-        A clearer Stage 1 view based on the chats: client asks about a maid, MMR validates availability and fit,
-        then Sales/Bots only step in after the profile is confirmed suitable. The process flow is separated from the
-        problem notes so the journey is readable first and the failures remain visible below it.
+        This page now follows your approved end-to-end structure exactly. The stage roadmap at the top is the canonical
+        journey, and the BPMN board below focuses only on Stage 1 using your final sequence: availability check,
+        alternative shortlists, requirements only after two shortlist attempts, then Peekaboo versus maids.cc service.
       </p>
       <p class="stage-note">
-        Focus of this stage: inquiry, intent capture, fit check before package, alternative profiles, first sales handoff,
-        and the main Stage 1 drop-off points.
+        Source of truth used here: Stage 1 Inquiry &amp; Availability Check, Stage 2 Offer &amp; Package Presentation,
+        Stage 3 Questions &amp; Qualification, Stage 4 Budget &amp; Commercial Discussion, Stage 5 Interview &amp; Trial Decision,
+        Stage 6 Trial Readiness &amp; Payment, Stage 7 Trial Period, Stage 8 Resolution Flow, Stage 9 Refund Procedure,
+        Stage 10 Contract &amp; Visa Process.
       </p>
+    </div>
+
+    <div class="roadmap" aria-label="Approved stage roadmap">
+      <div class="roadmap-card active">
+        <div class="roadmap-stage">Stage 1</div>
+        <div class="roadmap-title">Inquiry &amp; Availability Check</div>
+        <div class="roadmap-text">Availability, alternatives, shortlist loops, requirements, Peekaboo vs CC service decision.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 2</div>
+        <div class="roadmap-title">Offer &amp; Package Presentation</div>
+        <div class="roadmap-text">Profile, salary, 1-week trial package, visa package pricing.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 3</div>
+        <div class="roadmap-title">Questions &amp; Qualification</div>
+        <div class="roadmap-text">References, fit validation, start date, existing client checks, contract context.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 4</div>
+        <div class="roadmap-title">Budget &amp; Commercial Discussion</div>
+        <div class="roadmap-text">Budget fit, pricing clarification, lower-cost profiles, nationalities, CC service option.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 5</div>
+        <div class="roadmap-title">Interview &amp; Trial Decision</div>
+        <div class="roadmap-text">Interview if requested, thank-you message, proceed to trial or follow-up sequence.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 6</div>
+        <div class="roadmap-title">Trial Readiness &amp; Payment</div>
+        <div class="roadmap-text">Ready within 7 days, collect documents, payment, ERP case, schedule arrival.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 7</div>
+        <div class="roadmap-title">Trial Period</div>
+        <div class="roadmap-text">Trial starts, check-ins, client feedback, success or failure decision.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 8</div>
+        <div class="roadmap-title">Resolution Flow</div>
+        <div class="roadmap-text">Reason analysis, replacement attempt, supervisor review, refund escalation.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 9</div>
+        <div class="roadmap-title">Refund Procedure</div>
+        <div class="roadmap-text">Investigation, internal review, approval, processing, confirmation.</div>
+      </div>
+      <div class="roadmap-card">
+        <div class="roadmap-stage">Stage 10</div>
+        <div class="roadmap-title">Contract &amp; Visa Process</div>
+        <div class="roadmap-text">Contract, payment, visa, medical, Emirates ID, onboarding, contract active.</div>
+      </div>
     </div>
 
     <div class="board" aria-label="Stage 1 BPMN client journey diagram">
       <div class="lane client"></div>
       <div class="lane mmr"></div>
-      <div class="lane sales"></div>
+      <div class="lane outcomes"></div>
       <div class="lane issues"></div>
 
       <div class="lane-label client">Client</div>
       <div class="lane-label mmr">MMR Shadowers</div>
-      <div class="lane-label sales">Sales / Bots</div>
+      <div class="lane-label outcomes">Outcomes</div>
       <div class="lane-label issues">Stage 1 Issues</div>
 
-      <div class="stage-banner">Stage 1: Inquiry -> Fit Check -> Share Profile -> Package / Alternatives</div>
+      <div class="stage-banner">Stage 1 - Inquiry &amp; Availability Check</div>
 
       <div class="divider one"></div>
       <div class="divider two"></div>
       <div class="divider three"></div>
-      <div class="divider-label a">Client asks + MMR triage</div>
-      <div class="divider-label b">Availability + fit check</div>
-      <div class="divider-label c">Sales handoff + objection path</div>
+      <div class="divider-label a">Availability + first shortlist</div>
+      <div class="divider-label b">Second shortlist + requirements</div>
+      <div class="divider-label c">Match decision + service choice</div>
 
-      <div class="node event" style="left: 130px; top: 44px;">Start</div>
-      <div class="node task sales small" style="left: 245px; top: 30px; width: 355px;">
-        <strong>Client asks about a maid</strong>
-        Named maid, profile details, salary, interview, references, phone call, or contact details.
+      <div class="node event" style="left: 130px; top: 34px;">Start</div>
+      <div class="node task client small" style="left: 248px; top: 24px; width: 400px;">
+        <strong>Client asks about a Peekaboo maid</strong>
+        Availability, salary, cooking, childcare, pets, interview, or start date.
       </div>
 
-      <div class="line h arrow-right" style="left: 208px; top: 84px; width: 36px;"></div>
-      <div class="line v arrow-down" style="left: 421px; top: 94px; height: 92px;"></div>
+      <div class="line h arrow-right" style="left: 208px; top: 74px; width: 38px;"></div>
+      <div class="line v arrow-down" style="left: 447px; top: 88px; height: 118px;"></div>
 
-      <div class="node task" style="left: 245px; top: 188px; width: 355px;">
-        <strong>Understand the real request</strong>
-        Confirm what the client wants and whether the start is immediate or later.
+      <div class="node task" style="left: 260px; top: 208px; width: 325px;">
+        <strong>Check maid availability</strong>
+        MMR confirms whether the original maid is still available.
       </div>
 
-      <div class="line h arrow-right" style="left: 602px; top: 228px; width: 80px;"></div>
+      <div class="line h arrow-right" style="left: 587px; top: 249px; width: 74px;"></div>
 
-      <div class="node task" style="left: 684px; top: 188px; width: 360px;">
-        <strong>Check availability + read maid brief</strong>
-        Confirm exact profile, current availability, location, and contract type.
+      <div class="node gateway" style="left: 665px; top: 202px;" role="img" aria-label="Is the maid available?">
+        <div class="label">Is the maid<br>available?</div>
       </div>
 
-      <div class="line h arrow-right" style="left: 1046px; top: 228px; width: 84px;"></div>
+      <div class="connector-label yes" style="left: 788px; top: 190px;">YES</div>
+      <div class="line h arrow-right" style="left: 760px; top: 249px; width: 120px;"></div>
 
-      <div class="node task" style="left: 1132px; top: 170px; width: 430px;">
-        <strong>Check fit before package</strong>
-        Dogs/pets, cooking, childcare age, live-in or live-out, budget, age range, nationality, existing contract, and legal context.
+      <div class="node task outcome" style="left: 884px; top: 205px; width: 288px;">
+        <strong>Proceed to Stage 2</strong>
+        Offer &amp; Package Presentation
       </div>
 
-      <div class="line h arrow-right" style="left: 1564px; top: 228px; width: 74px;"></div>
+      <div class="connector-label no" style="left: 688px; top: 320px;">NO</div>
+      <div class="line v arrow-down" style="left: 710px; top: 296px; height: 100px;"></div>
 
-      <div class="node gateway" style="left: 1640px; top: 180px;" role="img" aria-label="Available and suitable?">
-        <div class="label">Available<br>and<br>suitable?</div>
+      <div class="node task" style="left: 840px; top: 382px; width: 330px;">
+        <strong>Send first shortlist</strong>
+        Immediately send 2-3 alternative Peekaboo profiles.
       </div>
 
-      <div class="connector-label yes" style="left: 1760px; top: 168px;">YES</div>
-      <div class="line h arrow-right" style="left: 1736px; top: 228px; width: 96px;"></div>
+      <div class="line h arrow-left" style="left: 712px; top: 423px; width: 126px;"></div>
 
-      <div class="node task" style="left: 1835px; top: 184px; width: 280px;">
-        <strong>Share profile details</strong>
-        Profile/video, exact salary or range, negotiation status, references policy, contact policy.
+      <div class="node task client small" style="left: 600px; top: 384px; width: 232px;">
+        "Do any of these stand out to you?"
       </div>
 
-      <div class="line v arrow-down" style="left: 1974px; top: 266px; height: 164px;"></div>
+      <div class="line h arrow-right" style="left: 1172px; top: 423px; width: 74px;"></div>
 
-      <div class="node task sales" style="left: 1738px; top: 432px; width: 476px;">
-        <strong>Send package once</strong>
-        Trial + visa package, what is included, and only after fit is confirmed.
-        <span class="micro">No duplicate messages. No script before understanding the client.</span>
+      <div class="node gateway" style="left: 1250px; top: 376px;" role="img" aria-label="Did the client select a profile first round?">
+        <div class="label">Did the client<br>select a profile?</div>
       </div>
 
-      <div class="connector-label no" style="left: 1666px; top: 300px;">NO</div>
-      <div class="line v arrow-down" style="left: 1686px; top: 272px; height: 156px;"></div>
+      <div class="connector-label yes" style="left: 1374px; top: 366px;">YES</div>
+      <div class="line h arrow-right" style="left: 1346px; top: 423px; width: 112px;"></div>
 
-      <div class="node task" style="left: 1380px; top: 432px; width: 310px;">
-        <strong>Collect requirements once</strong>
-        Live-in/out, budget, children, pets, cooking, city, age preference, start date.
+      <div class="node task outcome" style="left: 1462px; top: 380px; width: 288px;">
+        <strong>Proceed to Stage 2</strong>
+        Offer &amp; Package Presentation
       </div>
 
-      <div class="line h arrow-right" style="left: 1692px; top: 472px; width: 46px;"></div>
+      <div class="connector-label no" style="left: 1274px; top: 494px;">NO</div>
+      <div class="line v arrow-down" style="left: 1296px; top: 470px; height: 96px;"></div>
 
-      <div class="node task" style="left: 1028px; top: 432px; width: 320px;">
-        <strong>Send matching alternatives</strong>
-        Tailored shortlist instead of generic browsing links.
+      <div class="node task" style="left: 1432px; top: 514px; width: 310px;">
+        <strong>Send second shortlist</strong>
+        Another shortlist of profiles is sent.
       </div>
 
-      <div class="line h arrow-left" style="left: 1349px; top: 472px; width: 30px;"></div>
+      <div class="line h arrow-left" style="left: 1298px; top: 555px; width: 132px;"></div>
 
-      <div class="line v arrow-down" style="left: 1188px; top: 514px; height: 50px;"></div>
-
-      <div class="node task small" style="left: 1020px; top: 566px; width: 338px;">
-        Ask: "Do any of these maids stand out to you?"
+      <div class="node task client small" style="left: 1080px; top: 516px; width: 345px;">
+        Ask again: "May I know if any of the maids stand out to you?"
       </div>
 
-      <div class="line h arrow-right" style="left: 2214px; top: 472px; width: 0;"></div>
+      <div class="line h arrow-right" style="left: 1744px; top: 555px; width: 74px;"></div>
 
-      <div class="line h arrow-left" style="left: 1359px; top: 596px; width: 378px;"></div>
-
-      <div class="node task sales" style="left: 612px; top: 432px; width: 360px;">
-        <strong>Handle early objection correctly</strong>
-        Not ready in 7 days, budget too high, monthly plan, or legal sequencing issue.
+      <div class="node gateway" style="left: 1822px; top: 508px;" role="img" aria-label="Did the client select a profile second round?">
+        <div class="label">Did the client<br>select a profile?</div>
       </div>
 
-      <div class="line h arrow-left" style="left: 973px; top: 472px; width: 54px;"></div>
+      <div class="connector-label yes" style="left: 1946px; top: 498px;">YES</div>
+      <div class="line h arrow-right" style="left: 1918px; top: 555px; width: 112px;"></div>
 
-      <div class="line v arrow-down" style="left: 1974px; top: 514px; height: 54px;"></div>
-
-      <div class="node gateway" style="left: 1916px; top: 548px;" role="img" aria-label="Ready within 7 days and budget okay?">
-        <div class="label">Ready within<br>7 days and<br>budget okay?</div>
+      <div class="node task outcome" style="left: 2034px; top: 512px; width: 288px;">
+        <strong>Proceed to Stage 2</strong>
+        Offer &amp; Package Presentation
       </div>
 
-      <div class="connector-label yes" style="left: 2040px; top: 536px;">YES</div>
-      <div class="line h arrow-right" style="left: 2012px; top: 596px; width: 104px;"></div>
+      <div class="connector-label no" style="left: 1846px; top: 626px;">NO</div>
+      <div class="line v arrow-down" style="left: 1868px; top: 602px; height: 80px;"></div>
 
-      <div class="node task small" style="left: 2120px; top: 564px; width: 74px;">
-        Stage 2
+      <div class="node task" style="left: 1840px; top: 586px; width: 0; min-height:0; padding:0; border:0; background:transparent; box-shadow:none;"></div>
+
+      <div class="node task" style="left: 1660px; top: 618px; width: 360px;">
+        <strong>Collect detailed requirements</strong>
+        Budget, nationality, children, pets, cooking, live-in/out, day off, and start date.
       </div>
 
-      <div class="connector-label no" style="left: 1938px; top: 684px;">NO</div>
-      <div class="line h arrow-left" style="left: 973px; top: 596px; width: 942px;"></div>
+      <div class="line h arrow-left" style="left: 1478px; top: 659px; width: 180px;"></div>
+
+      <div class="node task" style="left: 1140px; top: 618px; width: 310px;">
+        <strong>Send matching profiles</strong>
+        Additional profiles based on the collected requirements.
+      </div>
+
+      <div class="line h arrow-left" style="left: 1030px; top: 659px; width: 108px;"></div>
+
+      <div class="node gateway" style="left: 932px; top: 612px;" role="img" aria-label="Match found?">
+        <div class="label">Match<br>found?</div>
+      </div>
+
+      <div class="connector-label yes" style="left: 1038px; top: 602px;">YES</div>
+      <div class="line v arrow-down" style="left: 978px; top: 706px; height: 42px;"></div>
+
+      <div class="node task outcome" style="left: 846px; top: 748px; width: 262px;">
+        <strong>Proceed to Stage 2</strong>
+        Offer &amp; Package Presentation
+      </div>
+
+      <div class="connector-label no" style="left: 844px; top: 650px;">NO</div>
+      <div class="line h arrow-left" style="left: 690px; top: 659px; width: 240px;"></div>
+
+      <div class="node task" style="left: 370px; top: 618px; width: 315px;">
+        <strong>Ask service preference</strong>
+        Continue exploring Peekaboo profiles or explore maids.cc monthly service?
+      </div>
+
+      <div class="line h arrow-left" style="left: 310px; top: 659px; width: 58px;"></div>
+
+      <div class="node gateway" style="left: 214px; top: 612px;" role="img" aria-label="Interested in maids.cc monthly service?">
+        <div class="label">Interested in<br>maids.cc<br>monthly service?</div>
+      </div>
+
+      <div class="connector-label yes" style="left: 320px; top: 602px;">YES</div>
+      <div class="line v arrow-down" style="left: 260px; top: 706px; height: 42px;"></div>
+
+      <div class="node task outcome" style="left: 124px; top: 748px; width: 272px;">
+        <strong>Transfer to CC Service</strong>
+        Move client to the maids.cc monthly service flow.
+      </div>
+
+      <div class="connector-label no" style="left: 122px; top: 650px;">NO</div>
+      <div class="line v arrow-down" style="left: 214px; top: 706px; height: 42px;"></div>
+
+      <div class="node task outcome" style="left: 414px; top: 748px; width: 330px;">
+        <strong>Continue matching or Lost Lead</strong>
+        Continue profile matching later or stop if the client rejects the path.
+      </div>
 
       <div class="issues-grid" aria-label="Stage 1 issue summary">
         <div class="issue-card">
-          <strong>I1 - Slow or wrong first response</strong>
+          <strong>I1 - Slow response at first contact</strong>
           <ul>
-            <li>13h to 21h response delay seen in multiple chats</li>
-            <li>Client sends "?" or "I am still waiting"</li>
-            <li>Contact / call request answered with a sales script</li>
+            <li>Observed delays before the first availability answer</li>
+            <li>Client sends "?" or follows up while waiting</li>
+            <li>Warm leads can drop before Stage 1 is completed</li>
           </ul>
         </div>
 
         <div class="issue-card">
-          <strong>I2 - Fit not checked before package</strong>
+          <strong>I2 - Alternatives not sent fast enough</strong>
           <ul>
-            <li>Dogs, cooking, childcare, age, live-in/live-out found too late</li>
-            <li>Wrong maid brief used or not read</li>
-            <li>Mismatch should be caught before handoff to Sales</li>
+            <li>When the maid is unavailable, no shortlist is sent immediately</li>
+            <li>Client is left without a next option</li>
+            <li>Momentum is lost before package stage</li>
           </ul>
         </div>
 
         <div class="issue-card">
-          <strong>I3 - Repeated requirement capture</strong>
+          <strong>I3 - Requirements collected too early or too often</strong>
           <ul>
-            <li>Client gives requirements to MMR then Bot asks again</li>
-            <li>Existing client treated as a new prospect</li>
-            <li>No single owner across teams</li>
+            <li>Client is asked full requirements before shortlist loops are tried</li>
+            <li>Or requirements are repeated by another team later</li>
+            <li>No continuity between MMR and later stages</li>
           </ul>
         </div>
 
         <div class="issue-card">
-          <strong>I4 - Weak MMR to Sales handoff</strong>
+          <strong>I4 - Generic links instead of curated matching</strong>
           <ul>
-            <li>Package sent twice by two agents</li>
-            <li>Salary / refund message inconsistent</li>
-            <li>Bot replies without reading the earlier thread</li>
+            <li>Generic website browsing replaces tailored alternatives</li>
+            <li>Inventory shortage is not escalated clearly</li>
+            <li>Client does the search instead of the team</li>
           </ul>
         </div>
 
         <div class="issue-card">
-          <strong>I5 - Alternative path not handled well</strong>
+          <strong>I5 - Fit questions postponed to later stages</strong>
           <ul>
-            <li>No matching shortlist or only generic website link</li>
-            <li>No escalation when inventory is exhausted</li>
-            <li>Client left to browse alone</li>
+            <li>Cooking, childcare, pets, start date, or contract context checked too late</li>
+            <li>This creates later mismatch and drop-off</li>
+            <li>Stage 1 should create a strong starting match</li>
           </ul>
         </div>
 
         <div class="issue-card">
-          <strong>I6 - Wrong timing / no call / legal stress</strong>
+          <strong>I6 - Weak routing to next path</strong>
           <ul>
-            <li>Client not ready within 7 days still pushed to buy now</li>
-            <li>Call requests ignored at the warmest moment</li>
-            <li>Existing contract or cancellation issue clarified too late</li>
+            <li>Peekaboo vs CC Service choice not made clearly</li>
+            <li>No clear end state: continue matching, CC service, or lost lead</li>
+            <li>Client gets stuck between journeys</li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="legend" aria-label="Diagram legend">
+      <div class="legend-item"><span class="swatch client"></span> Client / request node</div>
       <div class="legend-item"><span class="swatch task"></span> MMR task</div>
-      <div class="legend-item"><span class="swatch sales"></span> Sales / bot task</div>
+      <div class="legend-item"><span class="swatch outcome"></span> Outcome / transfer</div>
       <div class="legend-item"><span class="swatch gateway"></span> Decision gateway</div>
       <div class="legend-item"><span class="swatch issue"></span> Stage 1 issue card</div>
       <div class="legend-item"><span class="swatch" style="background:#2f63d8;border-radius:50%;"></span> Event</div>
