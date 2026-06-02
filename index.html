@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMR / Peekaboo Client Journey</title>
+  <style>
+    :root {
+      --border: #dbe4ef;
+      --lane-border: #d7e0eb;
+      --text: #233446;
+      --muted: #627385;
+      --client-lane: #eef3fb;
+      --mmr-lane: #f1fbf3;
+      --ops-lane: #f8f3ea;
+      --end-lane: #f5f1ff;
+      --client-bg: #e8f1ff;
+      --client-border: #4f83d8;
+      --task-bg: #eaf8ef;
+      --task-border: #3da76c;
+      --ops-bg: #fff8de;
+      --ops-border: #d8a104;
+      --route-bg: #efe8ff;
+      --route-border: #8f6ad9;
+      --danger-bg: #fff3f3;
+      --danger-border: #ea6b6b;
+      --shadow: 0 14px 30px rgba(31, 50, 81, 0.10);
+      --line-main: #748aa3;
+      --line-yes: #23a05a;
+      --line-no: #e14d4d;
+      --line-loop: #8667d8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #edf2f8 0%, #f7f9fc 100%);
+    }
+
+    .page {
+      max-width: 100%;
+      padding: 24px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #dfe9ff;
+      color: #2451a6;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: 34px;
+      line-height: 1.15;
+    }
+
+    .subtitle {
+      max-width: 1100px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .board-wrap {
+      margin-top: 24px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+    }
+
+    .board {
+      position: relative;
+      width: 6000px;
+      height: 1540px;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .lane {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid var(--lane-border);
+    }
+
+    .lane.client { top: 96px; height: 120px; background: var(--client-lane); }
+    .lane.mmr { top: 216px; height: 320px; background: var(--mmr-lane); }
+    .lane.ops { top: 536px; height: 400px; background: var(--ops-lane); }
+    .lane.end { top: 936px; height: 604px; background: var(--end-lane); border-bottom: 0; }
+
+    .lane-label {
+      position: absolute;
+      left: 0;
+      width: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--lane-border);
+      background: rgba(255, 255, 255, 0.36);
+      color: #35556f;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    .lane-label.client { top: 96px; height: 120px; }
+    .lane-label.mmr { top: 216px; height: 320px; }
+    .lane-label.ops { top: 536px; height: 400px; }
+    .lane-label.end { top: 936px; height: 604px; }
+
+    .stage-head {
+      position: absolute;
+      top: 18px;
+      height: 56px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 8px 18px rgba(53, 74, 107, 0.05);
+      z-index: 5;
+    }
+
+    .stage-head strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #3563ae;
+      margin-bottom: 4px;
+    }
+
+    .stage-head span {
+      display: block;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .stage-line {
+      position: absolute;
+      top: 96px;
+      bottom: 0;
+      width: 1px;
+      border-left: 2px dashed #d9e1ec;
+      z-index: 1;
+    }
+
+    .node {
+      position: absolute;
+      min-height: 86px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 2px solid var(--task-border);
+      background: var(--task-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.3;
+      z-index: 4;
+      box-shadow: 0 8px 16px rgba(53, 74, 107, 0.06);
+    }
+
+    .node strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .node small {
+      display: block;
+      font-size: 12px;
+      line-height: 1.3;
+      color: #5e7084;
+    }
+
+    .node.client { border-color: var(--client-border); background: var(--client-bg); }
+    .node.ops { border-color: var(--ops-border); background: var(--ops-bg); }
+    .node.route { border-color: var(--route-border); background: var(--route-bg); }
+    .node.danger { border-color: var(--danger-border); background: var(--danger-bg); }
+
+    .event {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #2f63d8;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      z-index: 4;
+      box-shadow: 0 12px 20px rgba(47, 99, 216, 0.22);
+    }
+
+    .diamond {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      transform: rotate(45deg);
+      border: 2px solid #d88b06;
+      background: #fff8de;
+      box-shadow: 0 8px 16px rgba(216, 161, 4, 0.12);
+      z-index: 4;
+    }
+
+    .diamond.small { width: 84px; height: 84px; }
+    .diamond.tiny { width: 80px; height: 80px; }
+
+    .diamond-label {
+      position: absolute;
+      width: 120px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #8a6400;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    .tag {
+      position: absolute;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      z-index: 6;
+    }
+
+    .tag.yes { color: var(--line-yes); }
+    .tag.no { color: var(--line-no); }
+
+    svg.wires {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      overflow: visible;
+    }
+
+    .wire-label {
+      position: absolute;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      z-index: 6;
+      white-space: nowrap;
+    }
+
+    .wire-label.main { color: #55697d; }
+    .wire-label.yes { color: var(--line-yes); }
+    .wire-label.no { color: var(--line-no); }
+    .wire-label.loop { color: var(--line-loop); }
+
+    .footer-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <span class="eyebrow">Clear Connected BPMN</span>
+    <h1>MMR / Peekaboo Client Journey</h1>
+    <p class="subtitle">
+      The same full BPMN flow, but spaced out more aggressively and redrawn with cleaner orthogonal arrows so each connector
+      lands on the right task, decision, or outcome.
+    </p>
+
+    <div class="board-wrap">
+      <div class="board">
+        <div class="lane client"></div>
+        <div class="lane mmr"></div>
+        <div class="lane ops"></div>
+        <div class="lane end"></div>
+
+        <div class="lane-label client">Client</div>
+        <div class="lane-label mmr">MMR / Sales</div>
+        <div class="lane-label ops">DDC / Ops</div>
+        <div class="lane-label end">Resolution / End States</div>
+
+        <div class="stage-head" style="left:110px;width:1800px;"><strong>Stage 1</strong><span>Inquiry &amp; Availability Check</span></div>
+        <div class="stage-head" style="left:1910px;width:320px;"><strong>Stage 2</strong><span>Offer &amp; Package</span></div>
+        <div class="stage-head" style="left:2230px;width:360px;"><strong>Stage 3</strong><span>Questions &amp; Qualification</span></div>
+        <div class="stage-head" style="left:2590px;width:400px;"><strong>Stage 4</strong><span>Budget Discussion</span></div>
+        <div class="stage-head" style="left:2990px;width:380px;"><strong>Stage 5</strong><span>Interview &amp; Trial Decision</span></div>
+        <div class="stage-head" style="left:3370px;width:420px;"><strong>Stage 6</strong><span>Readiness &amp; Payment</span></div>
+        <div class="stage-head" style="left:3790px;width:360px;"><strong>Stage 7</strong><span>Trial Period</span></div>
+        <div class="stage-head" style="left:4150px;width:360px;"><strong>Stage 8</strong><span>Resolution Flow</span></div>
+        <div class="stage-head" style="left:4510px;width:280px;"><strong>Stage 9</strong><span>Refund Procedure</span></div>
+        <div class="stage-head" style="left:4790px;width:1090px;"><strong>Stage 10</strong><span>Contract &amp; Visa Process</span></div>
+
+        <div class="stage-line" style="left:1910px;"></div>
+        <div class="stage-line" style="left:2230px;"></div>
+        <div class="stage-line" style="left:2590px;"></div>
+        <div class="stage-line" style="left:2990px;"></div>
+        <div class="stage-line" style="left:3370px;"></div>
+        <div class="stage-line" style="left:3790px;"></div>
+        <div class="stage-line" style="left:4150px;"></div>
+        <div class="stage-line" style="left:4510px;"></div>
+        <div class="stage-line" style="left:4790px;"></div>
+
+        <svg class="wires" viewBox="0 0 6000 1540" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <marker id="arrow-main" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line-main)"></path>
+            </marker>
+            <marker id="arrow-yes" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line-yes)"></path>
+            </marker>
+            <marker id="arrow-no" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line-no)"></path>
+            </marker>
+            <marker id="arrow-loop" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--line-loop)"></path>
+            </marker>
+          </defs>
+
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" opacity="0.18">
+            <line x1="202" y1="154" x2="250" y2="154" stroke="#ffffff"></line>
+            <polyline points="580,154 580,343 640,343" stroke="#ffffff"></polyline>
+            <line x1="890" y1="343" x2="960" y2="343" stroke="#ffffff"></line>
+            <line x1="1050" y1="343" x2="1940" y2="343" stroke="#ffffff"></line>
+            <polyline points="1005,388 1005,653 740,653" stroke="#ffffff"></polyline>
+            <line x1="740" y1="653" x2="800" y2="653" stroke="#ffffff"></line>
+            <polyline points="842,608 842,343 1940,343" stroke="#ffffff"></polyline>
+            <line x1="884" y1="653" x2="980" y2="653" stroke="#ffffff"></line>
+            <line x1="1220" y1="653" x2="1280" y2="653" stroke="#ffffff"></line>
+            <polyline points="1322,608 1322,343 1940,343" stroke="#ffffff"></polyline>
+            <polyline points="1322,692 1322,803 1460,803" stroke="#ffffff"></polyline>
+            <line x1="1730" y1="803" x2="1810" y2="803" stroke="#ffffff"></line>
+            <line x1="2080" y1="803" x2="2140" y2="803" stroke="#ffffff"></line>
+            <polyline points="2182,758 2182,343 1940,343" stroke="#ffffff"></polyline>
+            <polyline points="2182,842 2182,953 1920,953" stroke="#ffffff"></polyline>
+            <line x1="1920" y1="953" x2="1980" y2="953" stroke="#ffffff"></line>
+            <polyline points="2020,988 2020,1320 1725,1320 1725,1360" stroke="#ffffff"></polyline>
+            <polyline points="1980,953 1400,953 1400,1360" stroke="#ffffff"></polyline>
+            <line x1="2170" y1="343" x2="2250" y2="343" stroke="#ffffff"></line>
+            <line x1="2510" y1="343" x2="2560" y2="343" stroke="#ffffff"></line>
+            <line x1="2650" y1="343" x2="2690" y2="343" stroke="#ffffff"></line>
+            <polyline points="2605,388 2605,1320 2365,1320 2365,1360" stroke="#ffffff"></polyline>
+            <line x1="2940" y1="343" x2="3010" y2="343" stroke="#ffffff"></line>
+            <line x1="3100" y1="343" x2="3140" y2="343" stroke="#ffffff"></line>
+            <polyline points="3055,388 3055,803 2960,803" stroke="#ffffff"></polyline>
+            <line x1="2960" y1="803" x2="3020" y2="803" stroke="#ffffff"></line>
+            <polyline points="3060,838 3060,1320 2830,1320 2830,1360" stroke="#ffffff"></polyline>
+            <polyline points="3060,838 3060,1320 3120,1320 3120,1360" stroke="#ffffff"></polyline>
+            <line x1="3380" y1="343" x2="3450" y2="343" stroke="#ffffff"></line>
+            <line x1="3540" y1="343" x2="3570" y2="343" stroke="#ffffff"></line>
+            <polyline points="3495,388 3495,803 3390,803" stroke="#ffffff"></polyline>
+            <polyline points="3260,846 3260,1360" stroke="#ffffff"></polyline>
+            <line x1="3660" y1="343" x2="3690" y2="343" stroke="#ffffff"></line>
+            <polyline points="3615,388 3615,803 3470,803" stroke="#ffffff"></polyline>
+            <polyline points="3585,846 3585,1360" stroke="#ffffff"></polyline>
+            <line x1="3940" y1="343" x2="3980" y2="343" stroke="#ffffff"></line>
+            <line x1="4230" y1="343" x2="4300" y2="343" stroke="#ffffff"></line>
+            <line x1="4390" y1="343" x2="5230" y2="343" stroke="#ffffff"></line>
+            <polyline points="4345,388 4345,1063 4200,1063" stroke="#ffffff"></polyline>
+            <line x1="4420" y1="1063" x2="4470" y2="1063" stroke="#ffffff"></line>
+            <line x1="4690" y1="1063" x2="4750" y2="1063" stroke="#ffffff"></line>
+            <polyline points="4792,1102 4792,1320 4300,1320 4300,1360" stroke="#ffffff"></polyline>
+            <polyline points="4792,1102 4792,1223 4470,1223" stroke="#ffffff"></polyline>
+            <line x1="4690" y1="1223" x2="4750" y2="1223" stroke="#ffffff"></line>
+            <line x1="4834" y1="1223" x2="4870" y2="1223" stroke="#ffffff"></line>
+            <polyline points="4792,1262 4792,1320 4300,1320 4300,1360" stroke="#ffffff"></polyline>
+            <polyline points="4980,1266 4980,1360" stroke="#ffffff"></polyline>
+            <polyline points="5370,386 5370,1360" stroke="#ffffff"></polyline>
+          </g>
+
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+            <line x1="202" y1="154" x2="250" y2="154" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="580,154 580,343 640,343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></polyline>
+            <line x1="890" y1="343" x2="960" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+
+            <line x1="1050" y1="343" x2="1940" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="1005,388 1005,653 740,653" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="740" y1="653" x2="800" y2="653" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="842,608 842,343 1940,343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <line x1="884" y1="653" x2="980" y2="653" stroke="var(--line-no)" marker-end="url(#arrow-no)"></line>
+
+            <line x1="1220" y1="653" x2="1280" y2="653" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="1322,608 1322,343 1940,343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="1322,692 1322,803 1460,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="1730" y1="803" x2="1810" y2="803" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="2080" y1="803" x2="2140" y2="803" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="2182,758 2182,343 1940,343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="2182,842 2182,953 1920,953" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="1920" y1="953" x2="1980" y2="953" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="2020,988 2020,1320 1725,1320 1725,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="1980,953 1400,953 1400,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="2170" y1="343" x2="2250" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="2510" y1="343" x2="2560" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="2650" y1="343" x2="2690" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="2605,388 2605,1320 2365,1320 2365,1360" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
+
+            <line x1="2940" y1="343" x2="3010" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="3100" y1="343" x2="3140" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="3055,388 3055,803 2960,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="2960" y1="803" x2="3020" y2="803" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="3060,838 3060,1320 2830,1320 2830,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="3060,838 3060,1320 3120,1320 3120,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="3380" y1="343" x2="3450" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="3540" y1="343" x2="3570" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="3495,388 3495,803 3390,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+            <polyline points="3260,846 3260,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="3660" y1="343" x2="3690" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="3615,388 3615,803 3470,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+            <polyline points="3585,846 3585,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="3940" y1="343" x2="3980" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4230" y1="343" x2="4300" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4390" y1="343" x2="5230" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="4345,388 4345,1063 4200,1063" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="4420" y1="1063" x2="4470" y2="1063" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4690" y1="1063" x2="4750" y2="1063" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="4792,1102 4792,1320 4300,1320 4300,1360" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
+            <polyline points="4792,1102 4792,1223 4470,1223" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+
+            <line x1="4690" y1="1223" x2="4750" y2="1223" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4834" y1="1223" x2="4870" y2="1223" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="4792,1262 4792,1320 4300,1320 4300,1360" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
+
+            <polyline points="4980,1266 4980,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="5370,386 5370,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+          </g>
+        </svg>
+
+        <div class="event" style="left:130px;top:118px;">Start</div>
+        <div class="node client" style="left:250px;top:110px;width:330px;">
+          <div><strong>Client asks about maid</strong><small>Availability, salary, childcare, pets, interview, start date.</small></div>
+        </div>
+
+        <div class="node" style="left:640px;top:300px;width:250px;">
+          <div><strong>Check availability</strong><small>MMR checks the original maid.</small></div>
+        </div>
+        <div class="diamond" style="left:960px;top:298px;"></div>
+        <div class="diamond-label" style="left:945px;top:322px;">Maid<br>available?</div>
+        <div class="tag yes" style="left:1072px;top:286px;">YES</div>
+        <div class="tag no" style="left:930px;top:392px;">NO</div>
+
+        <div class="node" style="left:500px;top:610px;width:240px;">
+          <div><strong>Send shortlist #1</strong><small>2-3 alternative Peekaboo profiles.</small></div>
+        </div>
+        <div class="diamond small" style="left:800px;top:608px;"></div>
+        <div class="diamond-label" style="left:784px;top:632px;">Profile<br>selected?</div>
+        <div class="tag yes" style="left:820px;top:594px;">YES</div>
+        <div class="tag no" style="left:910px;top:642px;">NO</div>
+
+        <div class="node" style="left:980px;top:610px;width:240px;">
+          <div><strong>Send shortlist #2</strong><small>Ask what stands out to the client.</small></div>
+        </div>
+        <div class="diamond small" style="left:1280px;top:608px;"></div>
+        <div class="diamond-label" style="left:1264px;top:632px;">Profile<br>selected?</div>
+        <div class="tag yes" style="left:1300px;top:594px;">YES</div>
+        <div class="tag no" style="left:1312px;top:706px;">NO</div>
+
+        <div class="node" style="left:1460px;top:760px;width:270px;">
+          <div><strong>Collect requirements</strong><small>Budget, nationality, kids, pets, cooking, live-in/out, day off, start date.</small></div>
+        </div>
+        <div class="node" style="left:1810px;top:760px;width:270px;">
+          <div><strong>Send matching profiles</strong><small>Profiles based on full requirements.</small></div>
+        </div>
+        <div class="diamond small" style="left:2140px;top:758px;"></div>
+        <div class="diamond-label" style="left:2124px;top:782px;">Match<br>found?</div>
+        <div class="tag yes" style="left:2160px;top:744px;">YES</div>
+        <div class="tag no" style="left:2190px;top:856px;">NO</div>
+
+        <div class="node ops" style="left:1600px;top:910px;width:320px;">
+          <div><strong>Peekaboo or CC Service?</strong><small>Continue exploring Peekaboo or move to maids.cc monthly service.</small></div>
+        </div>
+        <div class="diamond tiny" style="left:1980px;top:908px;"></div>
+        <div class="diamond-label" style="left:1962px;top:930px;">Interested in<br>CC Service?</div>
+        <div class="tag yes" style="left:2002px;top:894px;">YES</div>
+        <div class="tag no" style="left:1910px;top:942px;">NO</div>
+
+        <div class="node" style="left:1940px;top:300px;width:230px;">
+          <div><strong>Send offer package</strong><small>Profile, salary, trial package, visa package.</small></div>
+        </div>
+
+        <div class="node" style="left:2250px;top:300px;width:260px;">
+          <div><strong>Qualify + answer questions</strong><small>Fit, references, start date, existing client context.</small></div>
+        </div>
+        <div class="diamond" style="left:2560px;top:298px;"></div>
+        <div class="diamond-label" style="left:2545px;top:322px;">Still interested<br>in this maid?</div>
+        <div class="tag yes" style="left:2590px;top:286px;">YES</div>
+        <div class="tag no" style="left:2582px;top:392px;">NO</div>
+
+        <div class="node" style="left:2690px;top:300px;width:250px;">
+          <div><strong>Discuss budget</strong><small>Salary, trial, visa, monthly fees, payment expectations.</small></div>
+        </div>
+        <div class="diamond" style="left:3010px;top:298px;"></div>
+        <div class="diamond-label" style="left:2996px;top:322px;">Budget<br>fits?</div>
+        <div class="tag yes" style="left:3042px;top:286px;">YES</div>
+        <div class="tag no" style="left:3036px;top:392px;">NO</div>
+
+        <div class="node ops" style="left:2660px;top:760px;width:300px;">
+          <div><strong>Clarify + cheaper options</strong><small>Explain pricing, offer cheaper profiles, nationalities, then CC Service.</small></div>
+        </div>
+        <div class="diamond tiny" style="left:3020px;top:758px;"></div>
+        <div class="diamond-label" style="left:3004px;top:780px;">Accept<br>CC Service?</div>
+        <div class="tag yes" style="left:3042px;top:744px;">YES</div>
+        <div class="tag no" style="left:3048px;top:846px;">NO</div>
+
+        <div class="node" style="left:3140px;top:300px;width:240px;">
+          <div><strong>Interview if requested</strong><small>Schedule Meet, conduct interview, send thank-you.</small></div>
+        </div>
+        <div class="diamond" style="left:3450px;top:298px;"></div>
+        <div class="diamond-label" style="left:3436px;top:322px;">Proceed to<br>trial?</div>
+        <div class="tag yes" style="left:3482px;top:286px;">YES</div>
+        <div class="tag no" style="left:3476px;top:392px;">NO</div>
+
+        <div class="node ops" style="left:3130px;top:760px;width:260px;">
+          <div><strong>Reminder + follow-up</strong><small>Availability reminder and follow-up sequence.</small></div>
+        </div>
+
+        <div class="diamond" style="left:3570px;top:298px;"></div>
+        <div class="diamond-label" style="left:3556px;top:322px;">Ready within<br>7 days?</div>
+        <div class="tag yes" style="left:3602px;top:286px;">YES</div>
+        <div class="tag no" style="left:3596px;top:392px;">NO</div>
+
+        <div class="node ops" style="left:3470px;top:760px;width:260px;">
+          <div><strong>Move to queue</strong><small>Follow-up until the client is ready.</small></div>
+        </div>
+
+        <div class="node" style="left:3690px;top:300px;width:250px;">
+          <div><strong>Collect docs + payment</strong><small>EID, IBAN, address, pay link, ERP case, schedule trial.</small></div>
+        </div>
+
+        <div class="node" style="left:3980px;top:300px;width:250px;">
+          <div><strong>Trial starts + check-ins</strong><small>Maid arrives, feedback collected, performance monitored.</small></div>
+        </div>
+        <div class="diamond" style="left:4300px;top:298px;"></div>
+        <div class="diamond-label" style="left:4284px;top:322px;">Trial<br>successful?</div>
+        <div class="tag yes" style="left:4330px;top:286px;">YES</div>
+        <div class="tag no" style="left:4324px;top:392px;">NO</div>
+
+        <div class="node ops" style="left:4200px;top:1020px;width:220px;">
+          <div><strong>Understand reason</strong><small>Cooking, childcare, mismatch, refusal, expectations, changed mind.</small></div>
+        </div>
+        <div class="node ops" style="left:4470px;top:1020px;width:220px;">
+          <div><strong>Offer replacement</strong><small>Suggest alternative maids.</small></div>
+        </div>
+        <div class="diamond small" style="left:4750px;top:1018px;"></div>
+        <div class="diamond-label" style="left:4734px;top:1042px;">Accept<br>replacement?</div>
+        <div class="tag yes" style="left:4770px;top:1004px;">YES</div>
+        <div class="tag no" style="left:4768px;top:1112px;">NO</div>
+
+        <div class="node ops" style="left:4470px;top:1180px;width:220px;">
+          <div><strong>Supervisor review</strong><small>Resolution options, alternatives, refund discussion.</small></div>
+        </div>
+        <div class="diamond small" style="left:4750px;top:1178px;"></div>
+        <div class="diamond-label" style="left:4734px;top:1202px;">Still wants<br>refund?</div>
+        <div class="tag yes" style="left:4770px;top:1164px;">YES</div>
+        <div class="tag no" style="left:4768px;top:1272px;">NO</div>
+
+        <div class="node route" style="left:4870px;top:1180px;width:220px;">
+          <div><strong>Process refund</strong><small>Investigation, approval, processing, confirmation.</small></div>
+        </div>
+
+        <div class="node route" style="left:5230px;top:300px;width:280px;">
+          <div><strong>Contract + visa process</strong><small>Contract, remaining payment, visa, medical, Emirates ID, onboarding.</small></div>
+        </div>
+
+        <div class="node route" style="left:1260px;top:1360px;width:280px;">
+          <div><strong>Continue matching / Lost Lead</strong><small>Continue profile search or stop if the client does not proceed.</small></div>
+        </div>
+        <div class="node route" style="left:1600px;top:1360px;width:250px;">
+          <div><strong>Transfer to CC Service</strong><small>Move client to maids.cc monthly service flow.</small></div>
+        </div>
+        <div class="node route" style="left:2250px;top:1360px;width:230px;">
+          <div><strong>Return to matching</strong><small>Client did not proceed with this maid.</small></div>
+        </div>
+        <div class="node route" style="left:2710px;top:1360px;width:240px;">
+          <div><strong>Transfer to CC Service</strong><small>Budget redirected to monthly service flow.</small></div>
+        </div>
+        <div class="node danger" style="left:3010px;top:1360px;width:220px;">
+          <div><strong>Lost Lead</strong><small>Budget does not fit and CC Service not accepted.</small></div>
+        </div>
+        <div class="node route" style="left:3130px;top:1360px;width:220px;">
+          <div><strong>Dormant Lead</strong><small>Client needs time and stops responding.</small></div>
+        </div>
+        <div class="node route" style="left:3470px;top:1360px;width:230px;">
+          <div><strong>Follow-up Queue</strong><small>Client is not ready within 7 days.</small></div>
+        </div>
+        <div class="node route" style="left:4180px;top:1360px;width:240px;">
+          <div><strong>Replacement Loop</strong><small>Return to Stage 1 profile matching.</small></div>
+        </div>
+        <div class="node route" style="left:4870px;top:1360px;width:220px;">
+          <div><strong>Refund Completed</strong><small>Client exits after refund.</small></div>
+        </div>
+        <div class="node route" style="left:5230px;top:1360px;width:280px;">
+          <div><strong>Contract Active</strong><small>Client successfully hires the maid.</small></div>
+        </div>
+
+        <div class="wire-label main" style="left:610px;top:248px;">main path</div>
+        <div class="wire-label no" style="left:820px;top:470px;">if unavailable</div>
+        <div class="wire-label no" style="left:1010px;top:688px;">if shortlist #1 fails</div>
+        <div class="wire-label no" style="left:1450px;top:720px;">if shortlist #2 fails</div>
+        <div class="wire-label main" style="left:1760px;top:730px;">requirements path</div>
+        <div class="wire-label yes" style="left:2030px;top:690px;">match found - go to Stage 2</div>
+        <div class="wire-label no" style="left:1880px;top:1010px;">no match - choose next service path</div>
+        <div class="wire-label yes" style="left:2100px;top:1304px;">CC Service</div>
+        <div class="wire-label no" style="left:1430px;top:1304px;">continue matching / lost lead</div>
+
+        <div class="wire-label no" style="left:2410px;top:1298px;">return to matching</div>
+        <div class="wire-label no" style="left:2870px;top:720px;">budget issue path</div>
+        <div class="wire-label yes" style="left:2920px;top:1304px;">budget to CC Service</div>
+        <div class="wire-label no" style="left:3090px;top:1304px;">budget lost lead</div>
+
+        <div class="wire-label no" style="left:3180px;top:718px;">needs time</div>
+        <div class="wire-label no" style="left:3505px;top:718px;">not ready in 7 days</div>
+        <div class="wire-label yes" style="left:4020px;top:250px;">successful trial path</div>
+        <div class="wire-label no" style="left:4230px;top:735px;">failed trial path</div>
+
+        <div class="wire-label yes" style="left:4470px;top:1298px;">replacement accepted</div>
+        <div class="wire-label no" style="left:4580px;top:1140px;">replacement rejected</div>
+        <div class="wire-label yes" style="left:4920px;top:1298px;">refund completed</div>
+        <div class="wire-label yes" style="left:5290px;top:1298px;">contract active</div>
+      </div>
+    </div>
+
+    <p class="footer-note">
+      Happy path runs across the top. Alternative, budget, follow-up, replacement, refund, and end-state routes are spaced into lower lanes.
+    </p>
+  </div>
+</body>
+</html>
