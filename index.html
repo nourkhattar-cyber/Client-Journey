@@ -25,7 +25,7 @@
       --danger-bg: #fff3f3;
       --danger-border: #ea6b6b;
       --shadow: 0 14px 30px rgba(31, 50, 81, 0.10);
-      --line-main: #8093a8;
+      --line-main: #748aa3;
       --line-yes: #23a05a;
       --line-no: #e14d4d;
       --line-loop: #8667d8;
@@ -259,6 +259,23 @@
       overflow: visible;
     }
 
+    .wire-label {
+      position: absolute;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      z-index: 6;
+      white-space: nowrap;
+    }
+
+    .wire-label.main { color: #55697d; }
+    .wire-label.yes { color: var(--line-yes); }
+    .wire-label.no { color: var(--line-no); }
+    .wire-label.loop { color: var(--line-loop); }
+
     .footer-note {
       margin-top: 14px;
       color: var(--muted);
@@ -323,6 +340,57 @@
               <path d="M0,0 L10,5 L0,10 z" fill="var(--line-loop)"></path>
             </marker>
           </defs>
+
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" opacity="0.18">
+            <line x1="202" y1="154" x2="250" y2="154" stroke="#ffffff"></line>
+            <polyline points="580,154 580,343 640,343" stroke="#ffffff"></polyline>
+            <line x1="890" y1="343" x2="960" y2="343" stroke="#ffffff"></line>
+            <line x1="1050" y1="343" x2="1940" y2="343" stroke="#ffffff"></line>
+            <polyline points="1005,388 1005,653 740,653" stroke="#ffffff"></polyline>
+            <line x1="740" y1="653" x2="800" y2="653" stroke="#ffffff"></line>
+            <polyline points="842,608 842,343 1940,343" stroke="#ffffff"></polyline>
+            <line x1="884" y1="653" x2="980" y2="653" stroke="#ffffff"></line>
+            <line x1="1220" y1="653" x2="1280" y2="653" stroke="#ffffff"></line>
+            <polyline points="1322,608 1322,343 1940,343" stroke="#ffffff"></polyline>
+            <polyline points="1322,692 1322,803 1460,803" stroke="#ffffff"></polyline>
+            <line x1="1730" y1="803" x2="1810" y2="803" stroke="#ffffff"></line>
+            <line x1="2080" y1="803" x2="2140" y2="803" stroke="#ffffff"></line>
+            <polyline points="2182,758 2182,343 1940,343" stroke="#ffffff"></polyline>
+            <polyline points="2182,842 2182,953 1920,953" stroke="#ffffff"></polyline>
+            <line x1="1920" y1="953" x2="1980" y2="953" stroke="#ffffff"></line>
+            <polyline points="2020,988 2020,1320 1725,1320 1725,1360" stroke="#ffffff"></polyline>
+            <polyline points="1980,953 1400,953 1400,1360" stroke="#ffffff"></polyline>
+            <line x1="2170" y1="343" x2="2250" y2="343" stroke="#ffffff"></line>
+            <line x1="2510" y1="343" x2="2560" y2="343" stroke="#ffffff"></line>
+            <line x1="2650" y1="343" x2="2690" y2="343" stroke="#ffffff"></line>
+            <polyline points="2605,388 2605,1320 2365,1320 2365,1360" stroke="#ffffff"></polyline>
+            <line x1="2940" y1="343" x2="3010" y2="343" stroke="#ffffff"></line>
+            <line x1="3100" y1="343" x2="3140" y2="343" stroke="#ffffff"></line>
+            <polyline points="3055,388 3055,803 2960,803" stroke="#ffffff"></polyline>
+            <line x1="2960" y1="803" x2="3020" y2="803" stroke="#ffffff"></line>
+            <polyline points="3060,838 3060,1320 2830,1320 2830,1360" stroke="#ffffff"></polyline>
+            <polyline points="3060,838 3060,1320 3120,1320 3120,1360" stroke="#ffffff"></polyline>
+            <line x1="3380" y1="343" x2="3450" y2="343" stroke="#ffffff"></line>
+            <line x1="3540" y1="343" x2="3570" y2="343" stroke="#ffffff"></line>
+            <polyline points="3495,388 3495,803 3390,803" stroke="#ffffff"></polyline>
+            <polyline points="3260,846 3260,1360" stroke="#ffffff"></polyline>
+            <line x1="3660" y1="343" x2="3690" y2="343" stroke="#ffffff"></line>
+            <polyline points="3615,388 3615,803 3470,803" stroke="#ffffff"></polyline>
+            <polyline points="3585,846 3585,1360" stroke="#ffffff"></polyline>
+            <line x1="3940" y1="343" x2="3980" y2="343" stroke="#ffffff"></line>
+            <line x1="4230" y1="343" x2="4300" y2="343" stroke="#ffffff"></line>
+            <line x1="4390" y1="343" x2="5230" y2="343" stroke="#ffffff"></line>
+            <polyline points="4345,388 4345,1063 4200,1063" stroke="#ffffff"></polyline>
+            <line x1="4420" y1="1063" x2="4470" y2="1063" stroke="#ffffff"></line>
+            <line x1="4690" y1="1063" x2="4750" y2="1063" stroke="#ffffff"></line>
+            <polyline points="4792,1102 4792,1320 4300,1320 4300,1360" stroke="#ffffff"></polyline>
+            <polyline points="4792,1102 4792,1223 4470,1223" stroke="#ffffff"></polyline>
+            <line x1="4690" y1="1223" x2="4750" y2="1223" stroke="#ffffff"></line>
+            <line x1="4834" y1="1223" x2="4870" y2="1223" stroke="#ffffff"></line>
+            <polyline points="4792,1262 4792,1320 4300,1320 4300,1360" stroke="#ffffff"></polyline>
+            <polyline points="4980,1266 4980,1360" stroke="#ffffff"></polyline>
+            <polyline points="5370,386 5370,1360" stroke="#ffffff"></polyline>
+          </g>
 
           <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
             <line x1="202" y1="154" x2="250" y2="154" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
@@ -556,6 +624,31 @@
         <div class="node route" style="left:5230px;top:1360px;width:280px;">
           <div><strong>Contract Active</strong><small>Client successfully hires the maid.</small></div>
         </div>
+
+        <div class="wire-label main" style="left:610px;top:248px;">main path</div>
+        <div class="wire-label no" style="left:820px;top:470px;">if unavailable</div>
+        <div class="wire-label no" style="left:1010px;top:688px;">if shortlist #1 fails</div>
+        <div class="wire-label no" style="left:1450px;top:720px;">if shortlist #2 fails</div>
+        <div class="wire-label main" style="left:1760px;top:730px;">requirements path</div>
+        <div class="wire-label yes" style="left:2030px;top:690px;">match found - go to Stage 2</div>
+        <div class="wire-label no" style="left:1880px;top:1010px;">no match - choose next service path</div>
+        <div class="wire-label yes" style="left:2100px;top:1304px;">CC Service</div>
+        <div class="wire-label no" style="left:1430px;top:1304px;">continue matching / lost lead</div>
+
+        <div class="wire-label no" style="left:2410px;top:1298px;">return to matching</div>
+        <div class="wire-label no" style="left:2870px;top:720px;">budget issue path</div>
+        <div class="wire-label yes" style="left:2920px;top:1304px;">budget to CC Service</div>
+        <div class="wire-label no" style="left:3090px;top:1304px;">budget lost lead</div>
+
+        <div class="wire-label no" style="left:3180px;top:718px;">needs time</div>
+        <div class="wire-label no" style="left:3505px;top:718px;">not ready in 7 days</div>
+        <div class="wire-label yes" style="left:4020px;top:250px;">successful trial path</div>
+        <div class="wire-label no" style="left:4230px;top:735px;">failed trial path</div>
+
+        <div class="wire-label yes" style="left:4470px;top:1298px;">replacement accepted</div>
+        <div class="wire-label no" style="left:4580px;top:1140px;">replacement rejected</div>
+        <div class="wire-label yes" style="left:4920px;top:1298px;">refund completed</div>
+        <div class="wire-label yes" style="left:5290px;top:1298px;">contract active</div>
       </div>
     </div>
 
