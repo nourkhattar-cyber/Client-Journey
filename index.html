@@ -6,27 +6,22 @@
   <title>MMR / Peekaboo Client Journey</title>
   <style>
     :root {
-      --board: #ffffff;
-      --line: #90a2b8;
-      --lane-border: #d8e0ea;
-      --client-bg: #eef3fb;
-      --mmr-bg: #f2fbf3;
-      --outcome-bg: #f6f1ff;
-      --issues-bg: #fff8f8;
-      --task-bg: #dff6e8;
-      --task-border: #3aa56a;
-      --client-task-bg: #e8f1ff;
-      --client-task-border: #4f83d8;
-      --outcome-task-bg: #efe8ff;
-      --outcome-task-border: #8b69d8;
-      --gateway-bg: #fff7d1;
-      --gateway-border: #d88b06;
-      --issue-bg: #fff3f3;
-      --issue-border: #ef6b6b;
-      --issue-text: #b63a3a;
-      --text: #243447;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --border: #dbe4ef;
+      --text: #233446;
       --muted: #627385;
-      --shadow: 0 14px 30px rgba(31, 50, 81, 0.12);
+      --blue-bg: #edf4ff;
+      --blue-border: #4f83d8;
+      --green-bg: #eaf8ef;
+      --green-border: #3da76c;
+      --amber-bg: #fff8de;
+      --amber-border: #d8a104;
+      --purple-bg: #f2ecff;
+      --purple-border: #8f6ad9;
+      --red-bg: #fff3f3;
+      --red-border: #ea6b6b;
+      --shadow: 0 14px 30px rgba(31, 50, 81, 0.08);
     }
 
     * {
@@ -41,13 +36,9 @@
     }
 
     .page {
-      max-width: 3080px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 24px;
-    }
-
-    .header {
-      margin-bottom: 18px;
     }
 
     .eyebrow {
@@ -64,728 +55,705 @@
 
     h1 {
       margin: 10px 0 8px;
-      font-size: 32px;
+      font-size: 34px;
       line-height: 1.15;
     }
 
     .subtitle {
-      max-width: 1400px;
+      max-width: 980px;
       margin: 0;
+      color: var(--muted);
       font-size: 15px;
       line-height: 1.55;
-      color: var(--muted);
     }
 
-    .stage-note {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #6c7d91;
-    }
-
-    .roadmap {
+    .summary {
       display: grid;
-      grid-template-columns: repeat(5, minmax(220px, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
-      margin: 22px 0 8px;
+      margin-top: 22px;
     }
 
-    .roadmap-card {
+    .summary-card {
       padding: 14px 16px;
-      border: 1px solid #dbe4ef;
+      border: 1px solid var(--border);
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.92);
-      box-shadow: 0 8px 18px rgba(53, 74, 107, 0.06);
+      box-shadow: 0 8px 18px rgba(53, 74, 107, 0.05);
     }
 
-    .roadmap-card.active {
-      border-color: #4f83d8;
-      background: #edf4ff;
-      box-shadow: 0 10px 22px rgba(79, 131, 216, 0.12);
-    }
-
-    .roadmap-stage {
-      margin-bottom: 6px;
-      color: #3563ae;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .roadmap-title {
-      font-size: 16px;
-      font-weight: 700;
-      line-height: 1.3;
-    }
-
-    .roadmap-text {
-      margin-top: 6px;
+    .summary-card strong {
+      display: block;
+      margin-bottom: 4px;
       font-size: 13px;
-      line-height: 1.4;
-      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #3a5f84;
     }
 
-    .board {
+    .summary-card span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .flow {
       position: relative;
-      width: 2940px;
-      height: 1020px;
-      margin-top: 22px;
-      overflow: hidden;
-      border: 1px solid #dbe3ee;
-      border-radius: 24px;
-      background: var(--board);
+      margin-top: 28px;
+      padding-left: 58px;
+    }
+
+    .flow::before {
+      content: "";
+      position: absolute;
+      left: 28px;
+      top: 12px;
+      bottom: 12px;
+      width: 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #4f83d8 0%, #8f6ad9 100%);
+    }
+
+    .stage {
+      position: relative;
+      margin-bottom: 22px;
+    }
+
+    .stage::before {
+      content: "";
+      position: absolute;
+      left: -42px;
+      top: 20px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 4px solid #4f83d8;
+      box-shadow: 0 0 0 6px rgba(79, 131, 216, 0.10);
+    }
+
+    .card {
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--card);
       box-shadow: var(--shadow);
     }
 
-    .lane {
-      position: absolute;
-      left: 0;
-      right: 0;
-      border-bottom: 1px solid var(--lane-border);
-    }
-
-    .lane.client {
-      top: 0;
-      height: 140px;
-      background: var(--client-bg);
-    }
-
-    .lane.mmr {
-      top: 140px;
-      height: 430px;
-      background: var(--mmr-bg);
-    }
-
-    .lane.outcomes {
-      top: 570px;
-      height: 160px;
-      background: var(--outcome-bg);
-    }
-
-    .lane.issues {
-      top: 730px;
-      height: 290px;
-      background: var(--issues-bg);
-      border-bottom: 0;
-    }
-
-    .lane-label {
-      position: absolute;
-      left: 0;
-      width: 92px;
+    .stage-head {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      border-right: 1px solid var(--lane-border);
-      background: rgba(255, 255, 255, 0.34);
-      color: #34566f;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 14px;
     }
 
-    .lane-label.client {
-      top: 0;
-      height: 140px;
-    }
-
-    .lane-label.mmr {
-      top: 140px;
-      height: 430px;
-    }
-
-    .lane-label.outcomes {
-      top: 570px;
-      height: 160px;
-    }
-
-    .lane-label.issues {
-      top: 730px;
-      height: 290px;
-    }
-
-    .stage-banner {
-      position: absolute;
-      left: 116px;
-      top: 14px;
-      padding: 10px 16px;
-      border: 1px solid #dbe3ee;
-      border-radius: 12px;
-      background: #ffffff;
-      box-shadow: 0 10px 24px rgba(53, 74, 107, 0.08);
-      color: #193654;
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .divider {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: #dde5ef;
-    }
-
-    .divider.one { left: 690px; }
-    .divider.two { left: 1450px; }
-    .divider.three { left: 2190px; }
-
-    .divider-label {
-      position: absolute;
-      top: 20px;
-      font-size: 13px;
+    .stage-number {
+      flex: 0 0 auto;
+      min-width: 64px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: var(--blue-bg);
+      border: 1px solid var(--blue-border);
+      color: #2451a6;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.05em;
-      color: #40607d;
       text-transform: uppercase;
-    }
-
-    .divider-label.a { left: 714px; }
-    .divider-label.b { left: 1475px; }
-    .divider-label.c { left: 2215px; }
-
-    .node {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-align: center;
-      z-index: 2;
     }
 
-    .event {
-      width: 78px;
-      height: 78px;
-      border-radius: 50%;
-      background: #2f63d8;
-      color: #ffffff;
-      font-size: 15px;
-      font-weight: 700;
-      box-shadow: 0 12px 20px rgba(47, 99, 216, 0.22);
+    .stage-title {
+      margin: 2px 0 6px;
+      font-size: 24px;
+      line-height: 1.2;
     }
 
-    .task {
-      min-height: 82px;
-      padding: 14px 18px;
-      border-radius: 14px;
-      border: 2px solid var(--task-border);
-      background: var(--task-bg);
-      box-shadow: 0 8px 18px rgba(57, 165, 106, 0.12);
-      font-size: 15px;
-      line-height: 1.35;
-    }
-
-    .task.client {
-      border-color: var(--client-task-border);
-      background: var(--client-task-bg);
-      box-shadow: 0 8px 18px rgba(79, 131, 216, 0.12);
-    }
-
-    .task.outcome {
-      border-color: var(--outcome-task-border);
-      background: var(--outcome-task-bg);
-      box-shadow: 0 8px 18px rgba(139, 105, 216, 0.12);
-    }
-
-    .task.small {
-      min-height: 64px;
-      font-size: 14px;
-    }
-
-    .task strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 15px;
-    }
-
-    .task .micro {
-      display: block;
-      margin-top: 6px;
-      color: #5e7084;
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
-    .gateway {
-      width: 96px;
-      height: 96px;
-      border: 2px solid var(--gateway-border);
-      background: var(--gateway-bg);
-      transform: rotate(45deg);
-      box-shadow: 0 10px 18px rgba(217, 137, 0, 0.12);
-    }
-
-    .gateway .label {
-      width: 132px;
-      color: #8c4f00;
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1.25;
-      transform: rotate(-45deg);
-    }
-
-    .line {
-      position: absolute;
-      background: var(--line);
-      z-index: 1;
-    }
-
-    .line.h { height: 3px; }
-    .line.v { width: 3px; }
-
-    .arrow-right::after,
-    .arrow-down::after,
-    .arrow-left::after {
-      content: "";
-      position: absolute;
-      width: 0;
-      height: 0;
-    }
-
-    .arrow-right::after {
-      right: -10px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-left: 10px solid var(--line);
-    }
-
-    .arrow-left::after {
-      left: -10px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-right: 10px solid var(--line);
-    }
-
-    .arrow-down::after {
-      left: 50%;
-      bottom: -10px;
-      transform: translateX(-50%);
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-top: 10px solid var(--line);
-    }
-
-    .connector-label {
-      position: absolute;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid #dbe3ee;
-      background: #ffffff;
-      font-size: 12px;
-      font-weight: 700;
-      z-index: 4;
-    }
-
-    .connector-label.yes { color: #16803f; }
-    .connector-label.no { color: #c83c3c; }
-
-    .issues-grid {
-      position: absolute;
-      left: 130px;
-      top: 766px;
-      width: 2680px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px 22px;
-      z-index: 2;
-    }
-
-    .issue-card {
-      padding: 12px 14px;
-      border: 2px dashed var(--issue-border);
-      border-radius: 12px;
-      background: var(--issue-bg);
-      color: var(--issue-text);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .issue-card strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .issue-card ul {
+    .stage-desc {
       margin: 0;
-      padding-left: 16px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
     }
 
-    .issue-card li + li {
+    .grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .box {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #fbfdff;
+    }
+
+    .box h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #355470;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .box ul,
+    .box ol {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .box li + li {
       margin-top: 4px;
     }
 
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
+    .decision {
+      border-color: var(--amber-border);
+      background: var(--amber-bg);
     }
 
-    .legend-item {
+    .decision h3 {
+      color: #8a6400;
+    }
+
+    .outcome {
+      border-color: var(--green-border);
+      background: var(--green-bg);
+    }
+
+    .outcome h3 {
+      color: #1d7a47;
+    }
+
+    .loop {
+      border-color: var(--purple-border);
+      background: var(--purple-bg);
+    }
+
+    .loop h3 {
+      color: #6641b0;
+    }
+
+    .arrow {
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid #dde6f0;
-      background: rgba(255, 255, 255, 0.9);
-      color: #4f6175;
-      font-size: 13px;
+      margin: 12px 0 2px;
+      color: #6d7f92;
+      font-size: 24px;
+      font-weight: 700;
     }
 
-    .swatch {
-      width: 16px;
-      height: 16px;
-      border-radius: 4px;
+    .end-states {
+      margin-top: 30px;
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 10px 24px rgba(53, 74, 107, 0.06);
     }
 
-    .swatch.task {
-      border: 2px solid var(--task-border);
-      background: var(--task-bg);
+    .end-states h2 {
+      margin: 0 0 16px;
+      font-size: 24px;
     }
 
-    .swatch.client {
-      border: 2px solid var(--client-task-border);
-      background: var(--client-task-bg);
+    .end-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    .swatch.outcome {
-      border: 2px solid var(--outcome-task-border);
-      background: var(--outcome-task-bg);
+    .end-card {
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #fbfdff;
     }
 
-    .swatch.gateway {
-      width: 14px;
-      height: 14px;
-      transform: rotate(45deg);
-      border: 2px solid var(--gateway-border);
-      background: var(--gateway-bg);
-      border-radius: 0;
+    .end-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
     }
 
-    .swatch.issue {
-      border: 2px dashed var(--issue-border);
-      background: var(--issue-bg);
+    .end-card span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
     }
 
-    @media (max-width: 3000px) {
-      .page {
-        overflow-x: auto;
+    .end-card.green {
+      background: var(--green-bg);
+      border-color: var(--green-border);
+    }
+
+    .end-card.purple {
+      background: var(--purple-bg);
+      border-color: var(--purple-border);
+    }
+
+    .end-card.red {
+      background: var(--red-bg);
+      border-color: var(--red-border);
+    }
+
+    @media (max-width: 1100px) {
+      .summary,
+      .grid,
+      .end-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="header">
-      <span class="eyebrow">Approved Stage Model</span>
-      <h1>MMR / Peekaboo Client Journey</h1>
-      <p class="subtitle">
-        This page now follows your approved end-to-end structure exactly. The stage roadmap at the top is the canonical
-        journey, and the BPMN board below focuses only on Stage 1 using your final sequence: availability check,
-        alternative shortlists, requirements only after two shortlist attempts, then Peekaboo versus maids.cc service.
-      </p>
-      <p class="stage-note">
-        Source of truth used here: Stage 1 Inquiry &amp; Availability Check, Stage 2 Offer &amp; Package Presentation,
-        Stage 3 Questions &amp; Qualification, Stage 4 Budget &amp; Commercial Discussion, Stage 5 Interview &amp; Trial Decision,
-        Stage 6 Trial Readiness &amp; Payment, Stage 7 Trial Period, Stage 8 Resolution Flow, Stage 9 Refund Procedure,
-        Stage 10 Contract &amp; Visa Process.
-      </p>
-    </div>
+    <span class="eyebrow">Minimal End-to-End Flow</span>
+    <h1>MMR / Peekaboo Client Journey</h1>
+    <p class="subtitle">
+      A simplified, structured view of the full journey from first inquiry to contract, replacement, refund, or drop-off.
+      This version uses your approved stages and keeps only the minimum process logic needed to understand how the flow works.
+    </p>
 
-    <div class="roadmap" aria-label="Approved stage roadmap">
-      <div class="roadmap-card active">
-        <div class="roadmap-stage">Stage 1</div>
-        <div class="roadmap-title">Inquiry &amp; Availability Check</div>
-        <div class="roadmap-text">Availability, alternatives, shortlist loops, requirements, Peekaboo vs CC service decision.</div>
+    <div class="summary" aria-label="Journey summary">
+      <div class="summary-card">
+        <strong>Starts with</strong>
+        <span>Client asks about a maid found on Peekaboo.</span>
       </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 2</div>
-        <div class="roadmap-title">Offer &amp; Package Presentation</div>
-        <div class="roadmap-text">Profile, salary, 1-week trial package, visa package pricing.</div>
+      <div class="summary-card">
+        <strong>Main middle</strong>
+        <span>Offer, qualification, budget discussion, interview, payment, and trial.</span>
       </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 3</div>
-        <div class="roadmap-title">Questions &amp; Qualification</div>
-        <div class="roadmap-text">References, fit validation, start date, existing client checks, contract context.</div>
+      <div class="summary-card">
+        <strong>If successful</strong>
+        <span>Contract and visa process begin.</span>
       </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 4</div>
-        <div class="roadmap-title">Budget &amp; Commercial Discussion</div>
-        <div class="roadmap-text">Budget fit, pricing clarification, lower-cost profiles, nationalities, CC service option.</div>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 5</div>
-        <div class="roadmap-title">Interview &amp; Trial Decision</div>
-        <div class="roadmap-text">Interview if requested, thank-you message, proceed to trial or follow-up sequence.</div>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 6</div>
-        <div class="roadmap-title">Trial Readiness &amp; Payment</div>
-        <div class="roadmap-text">Ready within 7 days, collect documents, payment, ERP case, schedule arrival.</div>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 7</div>
-        <div class="roadmap-title">Trial Period</div>
-        <div class="roadmap-text">Trial starts, check-ins, client feedback, success or failure decision.</div>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 8</div>
-        <div class="roadmap-title">Resolution Flow</div>
-        <div class="roadmap-text">Reason analysis, replacement attempt, supervisor review, refund escalation.</div>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 9</div>
-        <div class="roadmap-title">Refund Procedure</div>
-        <div class="roadmap-text">Investigation, internal review, approval, processing, confirmation.</div>
-      </div>
-      <div class="roadmap-card">
-        <div class="roadmap-stage">Stage 10</div>
-        <div class="roadmap-title">Contract &amp; Visa Process</div>
-        <div class="roadmap-text">Contract, payment, visa, medical, Emirates ID, onboarding, contract active.</div>
+      <div class="summary-card">
+        <strong>If not successful</strong>
+        <span>Replacement loop, refund procedure, dormant lead, or lost lead.</span>
       </div>
     </div>
 
-    <div class="board" aria-label="Stage 1 BPMN client journey diagram">
-      <div class="lane client"></div>
-      <div class="lane mmr"></div>
-      <div class="lane outcomes"></div>
-      <div class="lane issues"></div>
-
-      <div class="lane-label client">Client</div>
-      <div class="lane-label mmr">MMR Shadowers</div>
-      <div class="lane-label outcomes">Outcomes</div>
-      <div class="lane-label issues">Stage 1 Issues</div>
-
-      <div class="stage-banner">Stage 1 - Inquiry &amp; Availability Check</div>
-
-      <div class="divider one"></div>
-      <div class="divider two"></div>
-      <div class="divider three"></div>
-      <div class="divider-label a">Availability + first shortlist</div>
-      <div class="divider-label b">Second shortlist + requirements</div>
-      <div class="divider-label c">Match decision + service choice</div>
-
-      <div class="node event" style="left: 130px; top: 34px;">Start</div>
-      <div class="node task client small" style="left: 248px; top: 24px; width: 400px;">
-        <strong>Client asks about a Peekaboo maid</strong>
-        Availability, salary, cooking, childcare, pets, interview, or start date.
-      </div>
-
-      <div class="line h arrow-right" style="left: 208px; top: 74px; width: 38px;"></div>
-      <div class="line v arrow-down" style="left: 447px; top: 88px; height: 118px;"></div>
-
-      <div class="node task" style="left: 260px; top: 208px; width: 325px;">
-        <strong>Check maid availability</strong>
-        MMR confirms whether the original maid is still available.
-      </div>
-
-      <div class="line h arrow-right" style="left: 587px; top: 249px; width: 74px;"></div>
-
-      <div class="node gateway" style="left: 665px; top: 202px;" role="img" aria-label="Is the maid available?">
-        <div class="label">Is the maid<br>available?</div>
-      </div>
-
-      <div class="connector-label yes" style="left: 788px; top: 190px;">YES</div>
-      <div class="line h arrow-right" style="left: 760px; top: 249px; width: 120px;"></div>
-
-      <div class="node task outcome" style="left: 884px; top: 205px; width: 288px;">
-        <strong>Proceed to Stage 2</strong>
-        Offer &amp; Package Presentation
-      </div>
-
-      <div class="connector-label no" style="left: 688px; top: 320px;">NO</div>
-      <div class="line v arrow-down" style="left: 710px; top: 296px; height: 100px;"></div>
-
-      <div class="node task" style="left: 840px; top: 382px; width: 330px;">
-        <strong>Send first shortlist</strong>
-        Immediately send 2-3 alternative Peekaboo profiles.
-      </div>
-
-      <div class="line h arrow-left" style="left: 712px; top: 423px; width: 126px;"></div>
-
-      <div class="node task client small" style="left: 600px; top: 384px; width: 232px;">
-        "Do any of these stand out to you?"
-      </div>
-
-      <div class="line h arrow-right" style="left: 1172px; top: 423px; width: 74px;"></div>
-
-      <div class="node gateway" style="left: 1250px; top: 376px;" role="img" aria-label="Did the client select a profile first round?">
-        <div class="label">Did the client<br>select a profile?</div>
-      </div>
-
-      <div class="connector-label yes" style="left: 1374px; top: 366px;">YES</div>
-      <div class="line h arrow-right" style="left: 1346px; top: 423px; width: 112px;"></div>
-
-      <div class="node task outcome" style="left: 1462px; top: 380px; width: 288px;">
-        <strong>Proceed to Stage 2</strong>
-        Offer &amp; Package Presentation
-      </div>
-
-      <div class="connector-label no" style="left: 1274px; top: 494px;">NO</div>
-      <div class="line v arrow-down" style="left: 1296px; top: 470px; height: 96px;"></div>
-
-      <div class="node task" style="left: 1432px; top: 514px; width: 310px;">
-        <strong>Send second shortlist</strong>
-        Another shortlist of profiles is sent.
-      </div>
-
-      <div class="line h arrow-left" style="left: 1298px; top: 555px; width: 132px;"></div>
-
-      <div class="node task client small" style="left: 1080px; top: 516px; width: 345px;">
-        Ask again: "May I know if any of the maids stand out to you?"
-      </div>
-
-      <div class="line h arrow-right" style="left: 1744px; top: 555px; width: 74px;"></div>
-
-      <div class="node gateway" style="left: 1822px; top: 508px;" role="img" aria-label="Did the client select a profile second round?">
-        <div class="label">Did the client<br>select a profile?</div>
-      </div>
-
-      <div class="connector-label yes" style="left: 1946px; top: 498px;">YES</div>
-      <div class="line h arrow-right" style="left: 1918px; top: 555px; width: 112px;"></div>
-
-      <div class="node task outcome" style="left: 2034px; top: 512px; width: 288px;">
-        <strong>Proceed to Stage 2</strong>
-        Offer &amp; Package Presentation
-      </div>
-
-      <div class="connector-label no" style="left: 1846px; top: 626px;">NO</div>
-      <div class="line v arrow-down" style="left: 1868px; top: 602px; height: 80px;"></div>
-
-      <div class="node task" style="left: 1840px; top: 586px; width: 0; min-height:0; padding:0; border:0; background:transparent; box-shadow:none;"></div>
-
-      <div class="node task" style="left: 1660px; top: 618px; width: 360px;">
-        <strong>Collect detailed requirements</strong>
-        Budget, nationality, children, pets, cooking, live-in/out, day off, and start date.
-      </div>
-
-      <div class="line h arrow-left" style="left: 1478px; top: 659px; width: 180px;"></div>
-
-      <div class="node task" style="left: 1140px; top: 618px; width: 310px;">
-        <strong>Send matching profiles</strong>
-        Additional profiles based on the collected requirements.
-      </div>
-
-      <div class="line h arrow-left" style="left: 1030px; top: 659px; width: 108px;"></div>
-
-      <div class="node gateway" style="left: 932px; top: 612px;" role="img" aria-label="Match found?">
-        <div class="label">Match<br>found?</div>
-      </div>
-
-      <div class="connector-label yes" style="left: 1038px; top: 602px;">YES</div>
-      <div class="line v arrow-down" style="left: 978px; top: 706px; height: 42px;"></div>
-
-      <div class="node task outcome" style="left: 846px; top: 748px; width: 262px;">
-        <strong>Proceed to Stage 2</strong>
-        Offer &amp; Package Presentation
-      </div>
-
-      <div class="connector-label no" style="left: 844px; top: 650px;">NO</div>
-      <div class="line h arrow-left" style="left: 690px; top: 659px; width: 240px;"></div>
-
-      <div class="node task" style="left: 370px; top: 618px; width: 315px;">
-        <strong>Ask service preference</strong>
-        Continue exploring Peekaboo profiles or explore maids.cc monthly service?
-      </div>
-
-      <div class="line h arrow-left" style="left: 310px; top: 659px; width: 58px;"></div>
-
-      <div class="node gateway" style="left: 214px; top: 612px;" role="img" aria-label="Interested in maids.cc monthly service?">
-        <div class="label">Interested in<br>maids.cc<br>monthly service?</div>
-      </div>
-
-      <div class="connector-label yes" style="left: 320px; top: 602px;">YES</div>
-      <div class="line v arrow-down" style="left: 260px; top: 706px; height: 42px;"></div>
-
-      <div class="node task outcome" style="left: 124px; top: 748px; width: 272px;">
-        <strong>Transfer to CC Service</strong>
-        Move client to the maids.cc monthly service flow.
-      </div>
-
-      <div class="connector-label no" style="left: 122px; top: 650px;">NO</div>
-      <div class="line v arrow-down" style="left: 214px; top: 706px; height: 42px;"></div>
-
-      <div class="node task outcome" style="left: 414px; top: 748px; width: 330px;">
-        <strong>Continue matching or Lost Lead</strong>
-        Continue profile matching later or stop if the client rejects the path.
-      </div>
-
-      <div class="issues-grid" aria-label="Stage 1 issue summary">
-        <div class="issue-card">
-          <strong>I1 - Slow response at first contact</strong>
-          <ul>
-            <li>Observed delays before the first availability answer</li>
-            <li>Client sends "?" or follows up while waiting</li>
-            <li>Warm leads can drop before Stage 1 is completed</li>
-          </ul>
+    <div class="flow" aria-label="End to end client journey flow">
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 1</div>
+            <div>
+              <h2 class="stage-title">Inquiry &amp; Availability Check</h2>
+              <p class="stage-desc">Client asks about a maid. MMR checks availability and only collects full requirements after shortlist attempts fail.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>Main Flow</h3>
+              <ol>
+                <li>Client asks about a Peekaboo maid.</li>
+                <li>MMR checks if the maid is available.</li>
+                <li>If unavailable, send shortlist #1.</li>
+                <li>If still no selection, send shortlist #2.</li>
+                <li>If still no selection, collect full requirements.</li>
+                <li>Send matching profiles.</li>
+              </ol>
+            </div>
+            <div class="box decision">
+              <h3>Key Decisions</h3>
+              <ul>
+                <li>Maid available?</li>
+                <li>Client selected a profile?</li>
+                <li>Match found?</li>
+                <li>Interested in maids.cc monthly service?</li>
+              </ul>
+            </div>
+            <div class="box outcome">
+              <h3>Outputs</h3>
+              <ul>
+                <li>Proceed to Stage 2</li>
+                <li>Transfer to CC Service flow</li>
+                <li>Continue profile matching</li>
+                <li>Lost lead</li>
+              </ul>
+            </div>
+          </div>
         </div>
+        <div class="arrow">↓</div>
+      </section>
 
-        <div class="issue-card">
-          <strong>I2 - Alternatives not sent fast enough</strong>
-          <ul>
-            <li>When the maid is unavailable, no shortlist is sent immediately</li>
-            <li>Client is left without a next option</li>
-            <li>Momentum is lost before package stage</li>
-          </ul>
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 2</div>
+            <div>
+              <h2 class="stage-title">Offer &amp; Package Presentation</h2>
+              <p class="stage-desc">Once a maid is selected, the commercial offer is sent.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>Send</h3>
+              <ul>
+                <li>Maid profile</li>
+                <li>Salary information</li>
+                <li>1-week trial package</li>
+                <li>Visa package pricing</li>
+              </ul>
+            </div>
+            <div class="box decision">
+              <h3>Main Risk</h3>
+              <ul>
+                <li>Package sent before full fit validation.</li>
+              </ul>
+            </div>
+            <div class="box outcome">
+              <h3>Next</h3>
+              <ul>
+                <li>Client reviews the offer.</li>
+                <li>Proceed to Stage 3.</li>
+              </ul>
+            </div>
+          </div>
         </div>
+        <div class="arrow">↓</div>
+      </section>
 
-        <div class="issue-card">
-          <strong>I3 - Requirements collected too early or too often</strong>
-          <ul>
-            <li>Client is asked full requirements before shortlist loops are tried</li>
-            <li>Or requirements are repeated by another team later</li>
-            <li>No continuity between MMR and later stages</li>
-          </ul>
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 3</div>
+            <div>
+              <h2 class="stage-title">Questions &amp; Qualification</h2>
+              <p class="stage-desc">MMR answers detailed questions and validates fit, customer status, and contract context.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>Validate</h3>
+              <ul>
+                <li>References, cooking, childcare, pets, salary, visa ownership, interview, start date</li>
+                <li>Live-in / live-out, nationality, salary expectations</li>
+                <li>Existing contracts, previous contracts, replacement requests, documents</li>
+              </ul>
+            </div>
+            <div class="box decision">
+              <h3>Decision</h3>
+              <ul>
+                <li>Interested in this maid?</li>
+              </ul>
+            </div>
+            <div class="box loop">
+              <h3>Route</h3>
+              <ul>
+                <li>YES - Proceed to Stage 4</li>
+                <li>NO - Return to Stage 1 profile matching</li>
+              </ul>
+            </div>
+          </div>
         </div>
+        <div class="arrow">↓</div>
+      </section>
 
-        <div class="issue-card">
-          <strong>I4 - Generic links instead of curated matching</strong>
-          <ul>
-            <li>Generic website browsing replaces tailored alternatives</li>
-            <li>Inventory shortage is not escalated clearly</li>
-            <li>Client does the search instead of the team</li>
-          </ul>
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 4</div>
+            <div>
+              <h2 class="stage-title">Budget &amp; Commercial Discussion</h2>
+              <p class="stage-desc">Sales Supervisor handles salary, trial, visa, monthly charges, and budget fit.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>Discuss</h3>
+              <ul>
+                <li>Salary</li>
+                <li>Trial package</li>
+                <li>Visa package</li>
+                <li>Monthly fees</li>
+                <li>Payment expectations</li>
+              </ul>
+            </div>
+            <div class="box decision">
+              <h3>If Budget Does Not Fit</h3>
+              <ol>
+                <li>Clarify pricing structure</li>
+                <li>Offer lower salary profiles</li>
+                <li>Offer different nationalities</li>
+                <li>Offer cheaper candidates</li>
+                <li>Offer maids.cc Monthly Service</li>
+              </ol>
+            </div>
+            <div class="box outcome">
+              <h3>Route</h3>
+              <ul>
+                <li>YES - Proceed to Stage 5</li>
+                <li>CC Service accepted - Transfer to CC flow</li>
+                <li>NO - Lost lead</li>
+              </ul>
+            </div>
+          </div>
         </div>
+        <div class="arrow">↓</div>
+      </section>
 
-        <div class="issue-card">
-          <strong>I5 - Fit questions postponed to later stages</strong>
-          <ul>
-            <li>Cooking, childcare, pets, start date, or contract context checked too late</li>
-            <li>This creates later mismatch and drop-off</li>
-            <li>Stage 1 should create a strong starting match</li>
-          </ul>
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 5</div>
+            <div>
+              <h2 class="stage-title">Interview &amp; Trial Decision</h2>
+              <p class="stage-desc">Interview if requested, then ask whether the client wants to proceed with the trial.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>If Interview Requested</h3>
+              <ol>
+                <li>Schedule Google Meet</li>
+                <li>Conduct interview</li>
+                <li>Send thank-you message</li>
+                <li>Ask: proceed with trial?</li>
+              </ol>
+            </div>
+            <div class="box decision">
+              <h3>If No Interview / Needs Time</h3>
+              <ul>
+                <li>Ask directly about the trial</li>
+                <li>Send availability reminder</li>
+                <li>Move into follow-up sequence</li>
+              </ul>
+            </div>
+            <div class="box outcome">
+              <h3>Route</h3>
+              <ul>
+                <li>YES - Proceed to Stage 6</li>
+                <li>NO / later - Follow-up #1, Follow-up #2, Dormant Lead</li>
+              </ul>
+            </div>
+          </div>
         </div>
+        <div class="arrow">↓</div>
+      </section>
 
-        <div class="issue-card">
-          <strong>I6 - Weak routing to next path</strong>
-          <ul>
-            <li>Peekaboo vs CC Service choice not made clearly</li>
-            <li>No clear end state: continue matching, CC service, or lost lead</li>
-            <li>Client gets stuck between journeys</li>
-          </ul>
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 6</div>
+            <div>
+              <h2 class="stage-title">Trial Readiness &amp; Payment</h2>
+              <p class="stage-desc">Only proceed when the client is ready to start within 7 days.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>If Ready</h3>
+              <ol>
+                <li>Collect Emirates ID, IBAN, address, start date, required documents</li>
+                <li>Send payment link</li>
+                <li>Receive payment</li>
+                <li>Create ERP case</li>
+                <li>Schedule trial and arrival</li>
+                <li>Share maid contact details</li>
+              </ol>
+            </div>
+            <div class="box decision">
+              <h3>If Not Ready Within 7 Days</h3>
+              <ul>
+                <li>Send availability reminder</li>
+                <li>Move to follow-up queue</li>
+              </ul>
+            </div>
+            <div class="box outcome">
+              <h3>Next</h3>
+              <ul>
+                <li>Trial officially starts</li>
+                <li>Proceed to Stage 7</li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
+        <div class="arrow">↓</div>
+      </section>
+
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 7</div>
+            <div>
+              <h2 class="stage-title">Trial Period</h2>
+              <p class="stage-desc">The maid arrives, check-ins are performed, and the trial is evaluated.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>During Trial</h3>
+              <ul>
+                <li>Client feedback collected</li>
+                <li>Check-ins performed</li>
+                <li>Performance monitored</li>
+              </ul>
+            </div>
+            <div class="box decision">
+              <h3>Decision</h3>
+              <ul>
+                <li>Trial successful?</li>
+              </ul>
+            </div>
+            <div class="box outcome">
+              <h3>Route</h3>
+              <ul>
+                <li>YES - Proceed to Stage 10</li>
+                <li>NO - Proceed to Stage 8</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="arrow">↓</div>
+      </section>
+
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 8</div>
+            <div>
+              <h2 class="stage-title">Resolution Flow</h2>
+              <p class="stage-desc">When the trial fails, the team tries to retain the client before refunding.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>Resolution Steps</h3>
+              <ol>
+                <li>Understand the reason</li>
+                <li>Offer replacement</li>
+                <li>If needed, escalate to supervisor review</li>
+              </ol>
+            </div>
+            <div class="box decision">
+              <h3>Reasons / Decisions</h3>
+              <ul>
+                <li>Cooking, childcare, personality, refusal to work, mismatch, client changed mind</li>
+                <li>Accept replacement?</li>
+                <li>Still wants refund?</li>
+              </ul>
+            </div>
+            <div class="box loop">
+              <h3>Route</h3>
+              <ul>
+                <li>Replacement accepted - Return to Stage 1 matching</li>
+                <li>Refund wanted - Proceed to Stage 9</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="arrow">↓</div>
+      </section>
+
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 9</div>
+            <div>
+              <h2 class="stage-title">Refund Procedure</h2>
+              <p class="stage-desc">Refunds follow a formal internal review and approval path.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>Procedure</h3>
+              <ol>
+                <li>Case investigation</li>
+                <li>Internal review</li>
+                <li>Supervisor approval</li>
+                <li>Refund approval</li>
+                <li>Refund processing</li>
+                <li>Refund confirmation</li>
+              </ol>
+            </div>
+            <div class="box outcome">
+              <h3>End State</h3>
+              <ul>
+                <li>Refund completed</li>
+              </ul>
+            </div>
+            <div class="box loop">
+              <h3>Purpose</h3>
+              <ul>
+                <li>Formal closure after unsuccessful trial resolution.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="arrow">↓</div>
+      </section>
+
+      <section class="stage">
+        <div class="card">
+          <div class="stage-head">
+            <div class="stage-number">Stage 10</div>
+            <div>
+              <h2 class="stage-title">Contract &amp; Visa Process</h2>
+              <p class="stage-desc">If the trial succeeds, the client moves into contract activation and visa processing.</p>
+            </div>
+          </div>
+          <div class="grid">
+            <div class="box">
+              <h3>Process</h3>
+              <ol>
+                <li>Contract issued</li>
+                <li>Contract signed</li>
+                <li>Remaining payment collected</li>
+                <li>Visa processing begins</li>
+                <li>Medical examination</li>
+                <li>Emirates ID processing</li>
+                <li>Visa issuance</li>
+                <li>Maid onboarded</li>
+              </ol>
+            </div>
+            <div class="box outcome">
+              <h3>End State</h3>
+              <ul>
+                <li>Contract active</li>
+              </ul>
+            </div>
+            <div class="box loop">
+              <h3>Meaning</h3>
+              <ul>
+                <li>The client successfully hires the maid.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <div class="legend" aria-label="Diagram legend">
-      <div class="legend-item"><span class="swatch client"></span> Client / request node</div>
-      <div class="legend-item"><span class="swatch task"></span> MMR task</div>
-      <div class="legend-item"><span class="swatch outcome"></span> Outcome / transfer</div>
-      <div class="legend-item"><span class="swatch gateway"></span> Decision gateway</div>
-      <div class="legend-item"><span class="swatch issue"></span> Stage 1 issue card</div>
-      <div class="legend-item"><span class="swatch" style="background:#2f63d8;border-radius:50%;"></span> Event</div>
-    </div>
+    <section class="end-states" aria-label="Final end states">
+      <h2>Final End States</h2>
+      <div class="end-grid">
+        <div class="end-card green">
+          <strong>Contract Active</strong>
+          <span>Client successfully hires the maid.</span>
+        </div>
+        <div class="end-card purple">
+          <strong>Replacement Loop</strong>
+          <span>Client rejects the maid and returns to matching.</span>
+        </div>
+        <div class="end-card green">
+          <strong>Refund Completed</strong>
+          <span>Client exits after refund approval and processing.</span>
+        </div>
+        <div class="end-card purple">
+          <strong>Dormant Lead</strong>
+          <span>Client delays the decision and stops responding.</span>
+        </div>
+        <div class="end-card red">
+          <strong>Lost Lead</strong>
+          <span>Client rejects options or the budget never fits.</span>
+        </div>
+      </div>
+    </section>
   </div>
 </body>
 </html>
