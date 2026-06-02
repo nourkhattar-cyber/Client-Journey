@@ -6,8 +6,6 @@
   <title>MMR / Peekaboo Client Journey</title>
   <style>
     :root {
-      --bg: #f4f7fb;
-      --board: #ffffff;
       --border: #dbe4ef;
       --lane-border: #d7e0eb;
       --text: #233446;
@@ -27,7 +25,7 @@
       --danger-bg: #fff3f3;
       --danger-border: #ea6b6b;
       --shadow: 0 14px 30px rgba(31, 50, 81, 0.10);
-      --line-main: #7f93ab;
+      --line-main: #8093a8;
       --line-yes: #23a05a;
       --line-no: #e14d4d;
       --line-loop: #8667d8;
@@ -66,7 +64,7 @@
     }
 
     .subtitle {
-      max-width: 1080px;
+      max-width: 1100px;
       margin: 0;
       color: var(--muted);
       font-size: 15px;
@@ -81,11 +79,11 @@
 
     .board {
       position: relative;
-      width: 4500px;
-      height: 1220px;
+      width: 6000px;
+      height: 1540px;
       border: 1px solid var(--border);
       border-radius: 24px;
-      background: var(--board);
+      background: #ffffff;
       box-shadow: var(--shadow);
       overflow: hidden;
     }
@@ -97,10 +95,10 @@
       border-bottom: 1px solid var(--lane-border);
     }
 
-    .lane.client { top: 92px; height: 120px; background: var(--client-lane); }
-    .lane.mmr { top: 212px; height: 260px; background: var(--mmr-lane); }
-    .lane.ops { top: 472px; height: 220px; background: var(--ops-lane); }
-    .lane.end { top: 692px; height: 528px; background: var(--end-lane); border-bottom: 0; }
+    .lane.client { top: 96px; height: 120px; background: var(--client-lane); }
+    .lane.mmr { top: 216px; height: 320px; background: var(--mmr-lane); }
+    .lane.ops { top: 536px; height: 400px; background: var(--ops-lane); }
+    .lane.end { top: 936px; height: 604px; background: var(--end-lane); border-bottom: 0; }
 
     .lane-label {
       position: absolute;
@@ -120,10 +118,10 @@
       transform: rotate(180deg);
     }
 
-    .lane-label.client { top: 92px; height: 120px; }
-    .lane-label.mmr { top: 212px; height: 260px; }
-    .lane-label.ops { top: 472px; height: 220px; }
-    .lane-label.end { top: 692px; height: 528px; }
+    .lane-label.client { top: 96px; height: 120px; }
+    .lane-label.mmr { top: 216px; height: 320px; }
+    .lane-label.ops { top: 536px; height: 400px; }
+    .lane-label.end { top: 936px; height: 604px; }
 
     .stage-head {
       position: absolute;
@@ -134,6 +132,7 @@
       border: 1px solid var(--border);
       background: rgba(255, 255, 255, 0.96);
       box-shadow: 0 8px 18px rgba(53, 74, 107, 0.05);
+      z-index: 5;
     }
 
     .stage-head strong {
@@ -154,15 +153,16 @@
 
     .stage-line {
       position: absolute;
-      top: 92px;
+      top: 96px;
       bottom: 0;
       width: 1px;
       border-left: 2px dashed #d9e1ec;
+      z-index: 1;
     }
 
     .node {
       position: absolute;
-      min-height: 74px;
+      min-height: 86px;
       padding: 12px 14px;
       border-radius: 14px;
       border: 2px solid var(--task-border);
@@ -173,7 +173,7 @@
       text-align: center;
       font-size: 14px;
       line-height: 1.3;
-      z-index: 3;
+      z-index: 4;
       box-shadow: 0 8px 16px rgba(53, 74, 107, 0.06);
     }
 
@@ -190,25 +190,10 @@
       color: #5e7084;
     }
 
-    .node.client {
-      border-color: var(--client-border);
-      background: var(--client-bg);
-    }
-
-    .node.ops {
-      border-color: var(--ops-border);
-      background: var(--ops-bg);
-    }
-
-    .node.route {
-      border-color: var(--route-border);
-      background: var(--route-bg);
-    }
-
-    .node.danger {
-      border-color: var(--danger-border);
-      background: var(--danger-bg);
-    }
+    .node.client { border-color: var(--client-border); background: var(--client-bg); }
+    .node.ops { border-color: var(--ops-border); background: var(--ops-bg); }
+    .node.route { border-color: var(--route-border); background: var(--route-bg); }
+    .node.danger { border-color: var(--danger-border); background: var(--danger-bg); }
 
     .event {
       position: absolute;
@@ -223,40 +208,33 @@
       text-align: center;
       font-size: 15px;
       font-weight: 700;
-      z-index: 3;
+      z-index: 4;
       box-shadow: 0 12px 20px rgba(47, 99, 216, 0.22);
     }
 
     .diamond {
       position: absolute;
-      width: 88px;
-      height: 88px;
+      width: 90px;
+      height: 90px;
       transform: rotate(45deg);
       border: 2px solid #d88b06;
       background: #fff8de;
       box-shadow: 0 8px 16px rgba(216, 161, 4, 0.12);
-      z-index: 3;
+      z-index: 4;
     }
 
-    .diamond.small {
-      width: 80px;
-      height: 80px;
-    }
-
-    .diamond.tiny {
-      width: 78px;
-      height: 78px;
-    }
+    .diamond.small { width: 84px; height: 84px; }
+    .diamond.tiny { width: 80px; height: 80px; }
 
     .diamond-label {
       position: absolute;
-      width: 110px;
+      width: 120px;
       text-align: center;
       font-size: 12px;
       font-weight: 700;
       line-height: 1.2;
       color: #8a6400;
-      z-index: 4;
+      z-index: 5;
       pointer-events: none;
     }
 
@@ -268,7 +246,7 @@
       border: 1px solid var(--border);
       font-size: 12px;
       font-weight: 700;
-      z-index: 4;
+      z-index: 6;
     }
 
     .tag.yes { color: var(--line-yes); }
@@ -277,7 +255,7 @@
     svg.wires {
       position: absolute;
       inset: 0;
-      z-index: 1;
+      z-index: 2;
       overflow: visible;
     }
 
@@ -290,11 +268,11 @@
 </head>
 <body>
   <div class="page">
-    <span class="eyebrow">Full Connected BPMN</span>
+    <span class="eyebrow">Clear Connected BPMN</span>
     <h1>MMR / Peekaboo Client Journey</h1>
     <p class="subtitle">
-      A single connected BPMN-style flow covering all approved stages. The top path shows the happy path from inquiry to contract,
-      while the lower paths show alternatives, follow-up, replacement, refund, CC Service transfer, and end states.
+      The same full BPMN flow, but spaced out more aggressively and redrawn with cleaner orthogonal arrows so each connector
+      lands on the right task, decision, or outcome.
     </p>
 
     <div class="board-wrap">
@@ -309,58 +287,28 @@
         <div class="lane-label ops">DDC / Ops</div>
         <div class="lane-label end">Resolution / End States</div>
 
-        <div class="stage-head" style="left:110px;width:1490px;">
-          <strong>Stage 1</strong>
-          <span>Inquiry &amp; Availability Check</span>
-        </div>
-        <div class="stage-head" style="left:1600px;width:280px;">
-          <strong>Stage 2</strong>
-          <span>Offer &amp; Package</span>
-        </div>
-        <div class="stage-head" style="left:1880px;width:320px;">
-          <strong>Stage 3</strong>
-          <span>Questions &amp; Qualification</span>
-        </div>
-        <div class="stage-head" style="left:2200px;width:340px;">
-          <strong>Stage 4</strong>
-          <span>Budget Discussion</span>
-        </div>
-        <div class="stage-head" style="left:2540px;width:300px;">
-          <strong>Stage 5</strong>
-          <span>Interview &amp; Trial Decision</span>
-        </div>
-        <div class="stage-head" style="left:2840px;width:320px;">
-          <strong>Stage 6</strong>
-          <span>Readiness &amp; Payment</span>
-        </div>
-        <div class="stage-head" style="left:3160px;width:280px;">
-          <strong>Stage 7</strong>
-          <span>Trial Period</span>
-        </div>
-        <div class="stage-head" style="left:3440px;width:300px;">
-          <strong>Stage 8</strong>
-          <span>Resolution Flow</span>
-        </div>
-        <div class="stage-head" style="left:3740px;width:240px;">
-          <strong>Stage 9</strong>
-          <span>Refund Procedure</span>
-        </div>
-        <div class="stage-head" style="left:3980px;width:470px;">
-          <strong>Stage 10</strong>
-          <span>Contract &amp; Visa Process</span>
-        </div>
+        <div class="stage-head" style="left:110px;width:1800px;"><strong>Stage 1</strong><span>Inquiry &amp; Availability Check</span></div>
+        <div class="stage-head" style="left:1910px;width:320px;"><strong>Stage 2</strong><span>Offer &amp; Package</span></div>
+        <div class="stage-head" style="left:2230px;width:360px;"><strong>Stage 3</strong><span>Questions &amp; Qualification</span></div>
+        <div class="stage-head" style="left:2590px;width:400px;"><strong>Stage 4</strong><span>Budget Discussion</span></div>
+        <div class="stage-head" style="left:2990px;width:380px;"><strong>Stage 5</strong><span>Interview &amp; Trial Decision</span></div>
+        <div class="stage-head" style="left:3370px;width:420px;"><strong>Stage 6</strong><span>Readiness &amp; Payment</span></div>
+        <div class="stage-head" style="left:3790px;width:360px;"><strong>Stage 7</strong><span>Trial Period</span></div>
+        <div class="stage-head" style="left:4150px;width:360px;"><strong>Stage 8</strong><span>Resolution Flow</span></div>
+        <div class="stage-head" style="left:4510px;width:280px;"><strong>Stage 9</strong><span>Refund Procedure</span></div>
+        <div class="stage-head" style="left:4790px;width:1090px;"><strong>Stage 10</strong><span>Contract &amp; Visa Process</span></div>
 
-        <div class="stage-line" style="left:1600px;"></div>
-        <div class="stage-line" style="left:1880px;"></div>
-        <div class="stage-line" style="left:2200px;"></div>
-        <div class="stage-line" style="left:2540px;"></div>
-        <div class="stage-line" style="left:2840px;"></div>
-        <div class="stage-line" style="left:3160px;"></div>
-        <div class="stage-line" style="left:3440px;"></div>
-        <div class="stage-line" style="left:3740px;"></div>
-        <div class="stage-line" style="left:3980px;"></div>
+        <div class="stage-line" style="left:1910px;"></div>
+        <div class="stage-line" style="left:2230px;"></div>
+        <div class="stage-line" style="left:2590px;"></div>
+        <div class="stage-line" style="left:2990px;"></div>
+        <div class="stage-line" style="left:3370px;"></div>
+        <div class="stage-line" style="left:3790px;"></div>
+        <div class="stage-line" style="left:4150px;"></div>
+        <div class="stage-line" style="left:4510px;"></div>
+        <div class="stage-line" style="left:4790px;"></div>
 
-        <svg class="wires" viewBox="0 0 4500 1220" preserveAspectRatio="none" aria-hidden="true">
+        <svg class="wires" viewBox="0 0 6000 1540" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <marker id="arrow-main" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
               <path d="M0,0 L10,5 L0,10 z" fill="var(--line-main)"></path>
@@ -377,1034 +325,243 @@
           </defs>
 
           <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
-            <line x1="202" y1="146" x2="240" y2="146" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <polyline points="365,178 365,246 625,246 625,290" stroke="var(--line-main)" marker-end="url(#arrow-main)"></polyline>
-            <line x1="730" y1="327" x2="790" y2="327" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="202" y1="154" x2="250" y2="154" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="580,154 580,343 640,343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></polyline>
+            <line x1="890" y1="343" x2="960" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
 
-            <line x1="878" y1="326" x2="1650" y2="326" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <polyline points="834,370 834,437 710,437" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
-            <line x1="710" y1="437" x2="760" y2="437" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="1050" y1="343" x2="1940" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="1005,388 1005,653 740,653" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <polyline points="802,393 802,326 1650,326" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
-            <line x1="844" y1="435" x2="900" y2="435" stroke="var(--line-no)" marker-end="url(#arrow-no)"></line>
-            <line x1="1110" y1="437" x2="1160" y2="437" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="740" y1="653" x2="800" y2="653" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="842,608 842,343 1940,343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <line x1="884" y1="653" x2="980" y2="653" stroke="var(--line-no)" marker-end="url(#arrow-no)"></line>
 
-            <polyline points="1202,393 1202,326 1650,326" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
-            <polyline points="1202,477 1202,567 1020,567" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
-            <line x1="1240" y1="567" x2="1290" y2="567" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="1510" y1="567" x2="1540" y2="567" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="1220" y1="653" x2="1280" y2="653" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="1322,608 1322,343 1940,343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="1322,692 1322,803 1460,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <polyline points="1582,523 1582,326 1650,326" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
-            <polyline points="1582,607 1582,689 1340,689" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
-            <line x1="1340" y1="689" x2="1400" y2="684" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="1440" y1="724" x2="1440" y2="1070" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <polyline points="1400,684 1030,684 1030,1070" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+            <line x1="1730" y1="803" x2="1810" y2="803" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="2080" y1="803" x2="2140" y2="803" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="2182,758 2182,343 1940,343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="2182,842 2182,953 1920,953" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <line x1="1870" y1="326" x2="1930" y2="326" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="2180" y1="326" x2="2220" y2="326" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="2304" y1="324" x2="2360" y2="324" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <line x1="2262" y1="366" x2="2090" y2="1070" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></line>
+            <line x1="1920" y1="953" x2="1980" y2="953" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="2020,988 2020,1320 1725,1320 1725,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="1980,953 1400,953 1400,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <line x1="2580" y1="326" x2="2620" y2="326" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="2704" y1="324" x2="2730" y2="324" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <polyline points="2672,366 2672,557 2580,557" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
-            <line x1="2580" y1="557" x2="2620" y2="554" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="2660" y1="594" x2="2460" y2="1070" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <line x1="2700" y1="554" x2="2690" y2="1070" stroke="var(--line-no)" marker-end="url(#arrow-no)"></line>
+            <line x1="2170" y1="343" x2="2250" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="2510" y1="343" x2="2560" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="2650" y1="343" x2="2690" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="2605,388 2605,1320 2365,1320 2365,1360" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
 
-            <line x1="2940" y1="326" x2="2975" y2="326" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="3059" y1="324" x2="3090" y2="324" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <polyline points="3017,366 3017,557 2950,557" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
-            <line x1="2950" y1="557" x2="2880" y2="1070" stroke="var(--line-no)" marker-end="url(#arrow-no)"></line>
+            <line x1="2940" y1="343" x2="3010" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="3100" y1="343" x2="3140" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="3055,388 3055,803 2960,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <line x1="3132" y1="366" x2="3132" y2="557" stroke="var(--line-no)" marker-end="url(#arrow-no)"></line>
-            <line x1="3170" y1="557" x2="3170" y2="1070" stroke="var(--line-no)" marker-end="url(#arrow-no)"></line>
-            <line x1="3132" y1="324" x2="3220" y2="324" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <line x1="3420" y1="326" x2="3460" y2="326" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="2960" y1="803" x2="3020" y2="803" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="3060,838 3060,1320 2830,1320 2830,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="3060,838 3060,1320 3120,1320 3120,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <line x1="3580" y1="326" x2="3660" y2="326" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="3744" y1="324" x2="4260" y2="324" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <polyline points="3702,366 3702,797 3710,797" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+            <line x1="3380" y1="343" x2="3450" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="3540" y1="343" x2="3570" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="3495,388 3495,803 3390,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+            <polyline points="3260,846 3260,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <line x1="3900" y1="797" x2="3940" y2="793" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <polyline points="3979,832 3530,832 3530,1070" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
-            <polyline points="3979,871 3979,937 3710,937" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+            <line x1="3660" y1="343" x2="3690" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="3615,388 3615,803 3470,803" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
+            <polyline points="3585,846 3585,1360" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <line x1="3910" y1="937" x2="3940" y2="933" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
-            <line x1="4018" y1="933" x2="4050" y2="937" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <polyline points="3979,972 3979,1008 3530,1008 3530,1070" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
+            <line x1="3940" y1="343" x2="3980" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4230" y1="343" x2="4300" y2="343" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4390" y1="343" x2="5230" y2="343" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="4345,388 4345,1063 4200,1063" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <line x1="4140" y1="974" x2="4140" y2="1070" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
-            <line x1="4360" y1="364" x2="4360" y2="1070" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <line x1="4420" y1="1063" x2="4470" y2="1063" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4690" y1="1063" x2="4750" y2="1063" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <polyline points="4792,1102 4792,1320 4300,1320 4300,1360" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
+            <polyline points="4792,1102 4792,1223 4470,1223" stroke="var(--line-no)" marker-end="url(#arrow-no)"></polyline>
 
-            <polyline points="3530,1107 1130,1107 1130,604" stroke="var(--line-loop)" stroke-dasharray="10 10" marker-end="url(#arrow-loop)"></polyline>
+            <line x1="4690" y1="1223" x2="4750" y2="1223" stroke="var(--line-main)" marker-end="url(#arrow-main)"></line>
+            <line x1="4834" y1="1223" x2="4870" y2="1223" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></line>
+            <polyline points="4792,1262 4792,1320 4300,1320 4300,1360" stroke="var(--line-loop)" marker-end="url(#arrow-loop)"></polyline>
+
+            <polyline points="4980,1266 4980,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
+            <polyline points="5370,386 5370,1360" stroke="var(--line-yes)" marker-end="url(#arrow-yes)"></polyline>
           </g>
         </svg>
 
-        <div class="event" style="left:130px;top:110px;">Start</div>
-        <div class="node client" style="left:240px;top:100px;width:250px;">
+        <div class="event" style="left:130px;top:118px;">Start</div>
+        <div class="node client" style="left:250px;top:110px;width:330px;">
           <div><strong>Client asks about maid</strong><small>Availability, salary, childcare, pets, interview, start date.</small></div>
         </div>
 
-        <div class="node" style="left:520px;top:290px;width:210px;">
+        <div class="node" style="left:640px;top:300px;width:250px;">
           <div><strong>Check availability</strong><small>MMR checks the original maid.</small></div>
         </div>
-        <div class="diamond" style="left:790px;top:282px;"></div>
-        <div class="diamond-label" style="left:779px;top:306px;">Maid<br>available?</div>
-        <div class="tag yes" style="left:900px;top:286px;">YES</div>
-        <div class="tag no" style="left:760px;top:376px;">NO</div>
+        <div class="diamond" style="left:960px;top:298px;"></div>
+        <div class="diamond-label" style="left:945px;top:322px;">Maid<br>available?</div>
+        <div class="tag yes" style="left:1072px;top:286px;">YES</div>
+        <div class="tag no" style="left:930px;top:392px;">NO</div>
 
-        <div class="node" style="left:500px;top:400px;width:210px;">
+        <div class="node" style="left:500px;top:610px;width:240px;">
           <div><strong>Send shortlist #1</strong><small>2-3 alternative Peekaboo profiles.</small></div>
         </div>
-        <div class="diamond small" style="left:760px;top:393px;"></div>
-        <div class="diamond-label" style="left:747px;top:416px;">Profile<br>selected?</div>
-        <div class="tag yes" style="left:794px;top:378px;">YES</div>
-        <div class="tag no" style="left:850px;top:430px;">NO</div>
+        <div class="diamond small" style="left:800px;top:608px;"></div>
+        <div class="diamond-label" style="left:784px;top:632px;">Profile<br>selected?</div>
+        <div class="tag yes" style="left:820px;top:594px;">YES</div>
+        <div class="tag no" style="left:910px;top:642px;">NO</div>
 
-        <div class="node" style="left:900px;top:400px;width:210px;">
+        <div class="node" style="left:980px;top:610px;width:240px;">
           <div><strong>Send shortlist #2</strong><small>Ask what stands out to the client.</small></div>
         </div>
-        <div class="diamond small" style="left:1160px;top:393px;"></div>
-        <div class="diamond-label" style="left:1147px;top:416px;">Profile<br>selected?</div>
-        <div class="tag yes" style="left:1194px;top:378px;">YES</div>
-        <div class="tag no" style="left:1170px;top:483px;">NO</div>
+        <div class="diamond small" style="left:1280px;top:608px;"></div>
+        <div class="diamond-label" style="left:1264px;top:632px;">Profile<br>selected?</div>
+        <div class="tag yes" style="left:1300px;top:594px;">YES</div>
+        <div class="tag no" style="left:1312px;top:706px;">NO</div>
 
-        <div class="node" style="left:1020px;top:530px;width:220px;">
+        <div class="node" style="left:1460px;top:760px;width:270px;">
           <div><strong>Collect requirements</strong><small>Budget, nationality, kids, pets, cooking, live-in/out, day off, start date.</small></div>
         </div>
-        <div class="node" style="left:1290px;top:530px;width:220px;">
+        <div class="node" style="left:1810px;top:760px;width:270px;">
           <div><strong>Send matching profiles</strong><small>Profiles based on full requirements.</small></div>
         </div>
-        <div class="diamond small" style="left:1540px;top:523px;"></div>
-        <div class="diamond-label" style="left:1528px;top:547px;">Match<br>found?</div>
-        <div class="tag yes" style="left:1576px;top:508px;">YES</div>
-        <div class="tag no" style="left:1590px;top:613px;">NO</div>
+        <div class="diamond small" style="left:2140px;top:758px;"></div>
+        <div class="diamond-label" style="left:2124px;top:782px;">Match<br>found?</div>
+        <div class="tag yes" style="left:2160px;top:744px;">YES</div>
+        <div class="tag no" style="left:2190px;top:856px;">NO</div>
 
-        <div class="node ops" style="left:1090px;top:650px;width:250px;">
-          <div><strong>Peekaboo or CC Service?</strong><small>Ask whether to continue exploring Peekaboo or move to maids.cc monthly service.</small></div>
+        <div class="node ops" style="left:1600px;top:910px;width:320px;">
+          <div><strong>Peekaboo or CC Service?</strong><small>Continue exploring Peekaboo or move to maids.cc monthly service.</small></div>
         </div>
-        <div class="diamond tiny" style="left:1400px;top:644px;"></div>
-        <div class="diamond-label" style="left:1388px;top:666px;">Interested in<br>CC Service?</div>
-        <div class="tag yes" style="left:1434px;top:630px;">YES</div>
-        <div class="tag no" style="left:1350px;top:722px;">NO</div>
+        <div class="diamond tiny" style="left:1980px;top:908px;"></div>
+        <div class="diamond-label" style="left:1962px;top:930px;">Interested in<br>CC Service?</div>
+        <div class="tag yes" style="left:2002px;top:894px;">YES</div>
+        <div class="tag no" style="left:1910px;top:942px;">NO</div>
 
-        <div class="node" style="left:1650px;top:290px;width:220px;">
-          <div><strong>Send offer package</strong><small>Profile, salary, 1-week trial, visa package.</small></div>
+        <div class="node" style="left:1940px;top:300px;width:230px;">
+          <div><strong>Send offer package</strong><small>Profile, salary, trial package, visa package.</small></div>
         </div>
 
-        <div class="node" style="left:1930px;top:290px;width:250px;">
-          <div><strong>Answer questions + qualify</strong><small>References, fit, start date, existing client context.</small></div>
+        <div class="node" style="left:2250px;top:300px;width:260px;">
+          <div><strong>Qualify + answer questions</strong><small>Fit, references, start date, existing client context.</small></div>
         </div>
-        <div class="diamond small" style="left:2220px;top:282px;"></div>
-        <div class="diamond-label" style="left:2207px;top:306px;">Still interested<br>in this maid?</div>
-        <div class="tag yes" style="left:2256px;top:268px;">YES</div>
-        <div class="tag no" style="left:2234px;top:372px;">NO</div>
+        <div class="diamond" style="left:2560px;top:298px;"></div>
+        <div class="diamond-label" style="left:2545px;top:322px;">Still interested<br>in this maid?</div>
+        <div class="tag yes" style="left:2590px;top:286px;">YES</div>
+        <div class="tag no" style="left:2582px;top:392px;">NO</div>
 
-        <div class="node" style="left:2360px;top:290px;width:220px;">
+        <div class="node" style="left:2690px;top:300px;width:250px;">
           <div><strong>Discuss budget</strong><small>Salary, trial, visa, monthly fees, payment expectations.</small></div>
         </div>
-        <div class="diamond small" style="left:2620px;top:282px;"></div>
-        <div class="diamond-label" style="left:2608px;top:306px;">Budget<br>fits?</div>
-        <div class="tag yes" style="left:2656px;top:268px;">YES</div>
-        <div class="tag no" style="left:2634px;top:372px;">NO</div>
+        <div class="diamond" style="left:3010px;top:298px;"></div>
+        <div class="diamond-label" style="left:2996px;top:322px;">Budget<br>fits?</div>
+        <div class="tag yes" style="left:3042px;top:286px;">YES</div>
+        <div class="tag no" style="left:3036px;top:392px;">NO</div>
 
-        <div class="node ops" style="left:2330px;top:520px;width:250px;">
+        <div class="node ops" style="left:2660px;top:760px;width:300px;">
           <div><strong>Clarify + cheaper options</strong><small>Explain pricing, offer cheaper profiles, nationalities, then CC Service.</small></div>
         </div>
-        <div class="diamond tiny" style="left:2620px;top:514px;"></div>
-        <div class="diamond-label" style="left:2608px;top:536px;">Accept<br>CC Service?</div>
-        <div class="tag yes" style="left:2654px;top:500px;">YES</div>
-        <div class="tag no" style="left:2658px;top:594px;">NO</div>
+        <div class="diamond tiny" style="left:3020px;top:758px;"></div>
+        <div class="diamond-label" style="left:3004px;top:780px;">Accept<br>CC Service?</div>
+        <div class="tag yes" style="left:3042px;top:744px;">YES</div>
+        <div class="tag no" style="left:3048px;top:846px;">NO</div>
 
-        <div class="node" style="left:2730px;top:290px;width:210px;">
+        <div class="node" style="left:3140px;top:300px;width:240px;">
           <div><strong>Interview if requested</strong><small>Schedule Meet, conduct interview, send thank-you.</small></div>
         </div>
-        <div class="diamond small" style="left:2975px;top:282px;"></div>
-        <div class="diamond-label" style="left:2962px;top:306px;">Proceed to<br>trial?</div>
-        <div class="tag yes" style="left:3010px;top:268px;">YES</div>
-        <div class="tag no" style="left:2988px;top:372px;">NO</div>
+        <div class="diamond" style="left:3450px;top:298px;"></div>
+        <div class="diamond-label" style="left:3436px;top:322px;">Proceed to<br>trial?</div>
+        <div class="tag yes" style="left:3482px;top:286px;">YES</div>
+        <div class="tag no" style="left:3476px;top:392px;">NO</div>
 
-        <div class="node ops" style="left:2710px;top:520px;width:240px;">
-          <div><strong>Reminder + follow-up</strong><small>Availability reminder, follow-up 1, follow-up 2.</small></div>
+        <div class="node ops" style="left:3130px;top:760px;width:260px;">
+          <div><strong>Reminder + follow-up</strong><small>Availability reminder and follow-up sequence.</small></div>
         </div>
 
-        <div class="diamond small" style="left:3090px;top:282px;"></div>
-        <div class="diamond-label" style="left:3077px;top:306px;">Ready within<br>7 days?</div>
-        <div class="tag yes" style="left:3125px;top:268px;">YES</div>
-        <div class="tag no" style="left:3102px;top:372px;">NO</div>
+        <div class="diamond" style="left:3570px;top:298px;"></div>
+        <div class="diamond-label" style="left:3556px;top:322px;">Ready within<br>7 days?</div>
+        <div class="tag yes" style="left:3602px;top:286px;">YES</div>
+        <div class="tag no" style="left:3596px;top:392px;">NO</div>
 
-        <div class="node ops" style="left:3070px;top:520px;width:220px;">
+        <div class="node ops" style="left:3470px;top:760px;width:260px;">
           <div><strong>Move to queue</strong><small>Follow-up until the client is ready.</small></div>
         </div>
 
-        <div class="node" style="left:3220px;top:290px;width:200px;">
+        <div class="node" style="left:3690px;top:300px;width:250px;">
           <div><strong>Collect docs + payment</strong><small>EID, IBAN, address, pay link, ERP case, schedule trial.</small></div>
         </div>
 
-        <div class="node" style="left:3460px;top:290px;width:220px;">
+        <div class="node" style="left:3980px;top:300px;width:250px;">
           <div><strong>Trial starts + check-ins</strong><small>Maid arrives, feedback collected, performance monitored.</small></div>
         </div>
-        <div class="diamond small" style="left:3660px;top:282px;"></div>
-        <div class="diamond-label" style="left:3648px;top:306px;">Trial<br>successful?</div>
-        <div class="tag yes" style="left:3696px;top:268px;">YES</div>
-        <div class="tag no" style="left:3672px;top:372px;">NO</div>
+        <div class="diamond" style="left:4300px;top:298px;"></div>
+        <div class="diamond-label" style="left:4284px;top:322px;">Trial<br>successful?</div>
+        <div class="tag yes" style="left:4330px;top:286px;">YES</div>
+        <div class="tag no" style="left:4324px;top:392px;">NO</div>
 
-        <div class="node ops" style="left:3710px;top:760px;width:190px;">
+        <div class="node ops" style="left:4200px;top:1020px;width:220px;">
           <div><strong>Understand reason</strong><small>Cooking, childcare, mismatch, refusal, expectations, changed mind.</small></div>
         </div>
-        <div class="diamond tiny" style="left:3940px;top:754px;"></div>
-        <div class="diamond-label" style="left:3928px;top:776px;">Accept<br>replacement?</div>
-        <div class="tag yes" style="left:3974px;top:740px;">YES</div>
-        <div class="tag no" style="left:3952px;top:836px;">NO</div>
+        <div class="node ops" style="left:4470px;top:1020px;width:220px;">
+          <div><strong>Offer replacement</strong><small>Suggest alternative maids.</small></div>
+        </div>
+        <div class="diamond small" style="left:4750px;top:1018px;"></div>
+        <div class="diamond-label" style="left:4734px;top:1042px;">Accept<br>replacement?</div>
+        <div class="tag yes" style="left:4770px;top:1004px;">YES</div>
+        <div class="tag no" style="left:4768px;top:1112px;">NO</div>
 
-        <div class="node ops" style="left:3710px;top:900px;width:200px;">
+        <div class="node ops" style="left:4470px;top:1180px;width:220px;">
           <div><strong>Supervisor review</strong><small>Resolution options, alternatives, refund discussion.</small></div>
         </div>
-        <div class="diamond tiny" style="left:3940px;top:894px;"></div>
-        <div class="diamond-label" style="left:3928px;top:916px;">Still wants<br>refund?</div>
-        <div class="tag yes" style="left:3974px;top:880px;">YES</div>
-        <div class="tag no" style="left:3952px;top:976px;">NO</div>
+        <div class="diamond small" style="left:4750px;top:1178px;"></div>
+        <div class="diamond-label" style="left:4734px;top:1202px;">Still wants<br>refund?</div>
+        <div class="tag yes" style="left:4770px;top:1164px;">YES</div>
+        <div class="tag no" style="left:4768px;top:1272px;">NO</div>
 
-        <div class="node route" style="left:4050px;top:900px;width:180px;">
+        <div class="node route" style="left:4870px;top:1180px;width:220px;">
           <div><strong>Process refund</strong><small>Investigation, approval, processing, confirmation.</small></div>
         </div>
 
-        <div class="node route" style="left:4260px;top:290px;width:200px;">
+        <div class="node route" style="left:5230px;top:300px;width:280px;">
           <div><strong>Contract + visa process</strong><small>Contract, remaining payment, visa, medical, Emirates ID, onboarding.</small></div>
         </div>
 
-        <div class="node route" style="left:900px;top:1070px;width:260px;">
+        <div class="node route" style="left:1260px;top:1360px;width:280px;">
           <div><strong>Continue matching / Lost Lead</strong><small>Continue profile search or stop if the client does not proceed.</small></div>
         </div>
-        <div class="node route" style="left:1230px;top:1070px;width:220px;">
+        <div class="node route" style="left:1600px;top:1360px;width:250px;">
           <div><strong>Transfer to CC Service</strong><small>Move client to maids.cc monthly service flow.</small></div>
         </div>
-        <div class="node route" style="left:1980px;top:1070px;width:220px;">
+        <div class="node route" style="left:2250px;top:1360px;width:230px;">
           <div><strong>Return to matching</strong><small>Client did not proceed with this maid.</small></div>
         </div>
-        <div class="node route" style="left:2350px;top:1070px;width:220px;">
+        <div class="node route" style="left:2710px;top:1360px;width:240px;">
           <div><strong>Transfer to CC Service</strong><small>Budget redirected to monthly service flow.</small></div>
         </div>
-        <div class="node danger" style="left:2590px;top:1070px;width:200px;">
+        <div class="node danger" style="left:3010px;top:1360px;width:220px;">
           <div><strong>Lost Lead</strong><small>Budget does not fit and CC Service not accepted.</small></div>
         </div>
-        <div class="node route" style="left:2770px;top:1070px;width:220px;">
+        <div class="node route" style="left:3130px;top:1360px;width:220px;">
           <div><strong>Dormant Lead</strong><small>Client needs time and stops responding.</small></div>
         </div>
-        <div class="node route" style="left:3060px;top:1070px;width:220px;">
+        <div class="node route" style="left:3470px;top:1360px;width:230px;">
           <div><strong>Follow-up Queue</strong><small>Client is not ready within 7 days.</small></div>
         </div>
-        <div class="node route" style="left:3420px;top:1070px;width:220px;">
+        <div class="node route" style="left:4180px;top:1360px;width:240px;">
           <div><strong>Replacement Loop</strong><small>Return to Stage 1 profile matching.</small></div>
         </div>
-        <div class="node route" style="left:4050px;top:1070px;width:180px;">
+        <div class="node route" style="left:4870px;top:1360px;width:220px;">
           <div><strong>Refund Completed</strong><small>Client exits after refund.</small></div>
         </div>
-        <div class="node route" style="left:4260px;top:1070px;width:200px;">
+        <div class="node route" style="left:5230px;top:1360px;width:280px;">
           <div><strong>Contract Active</strong><small>Client successfully hires the maid.</small></div>
         </div>
       </div>
     </div>
 
     <p class="footer-note">
-      Read the flow left to right for the happy path, then use the lower branches for exception handling, CC Service transfer,
-      follow-up, replacement, refund, and final outcomes.
+      Happy path runs across the top. Alternative, budget, follow-up, replacement, refund, and end-state routes are spaced into lower lanes.
     </p>
-  </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MMR / Peekaboo Client Journey</title>
-  <style>
-    :root {
-      --bg: #f4f7fb;
-      --card: #ffffff;
-      --border: #dbe4ef;
-      --text: #233446;
-      --muted: #627385;
-      --client-bg: #edf4ff;
-      --client-border: #4f83d8;
-      --task-bg: #eaf8ef;
-      --task-border: #3da76c;
-      --decision-bg: #fff8de;
-      --decision-border: #d8a104;
-      --route-bg: #f2ecff;
-      --route-border: #8f6ad9;
-      --danger-bg: #fff3f3;
-      --danger-border: #ea6b6b;
-      --shadow: 0 14px 30px rgba(31, 50, 81, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
-      background: linear-gradient(180deg, #edf2f8 0%, #f7f9fc 100%);
-    }
-
-    .page {
-      max-width: 1380px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #dfe9ff;
-      color: #2451a6;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 10px 0 8px;
-      font-size: 34px;
-      line-height: 1.15;
-    }
-
-    .subtitle {
-      max-width: 1020px;
-      margin: 0;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.55;
-    }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
-      margin-bottom: 24px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid var(--border);
-      font-size: 13px;
-      color: #4f6175;
-    }
-
-    .chip {
-      width: 16px;
-      height: 16px;
-      border-radius: 4px;
-    }
-
-    .chip.client {
-      background: var(--client-bg);
-      border: 2px solid var(--client-border);
-    }
-
-    .chip.task {
-      background: var(--task-bg);
-      border: 2px solid var(--task-border);
-    }
-
-    .chip.route {
-      background: var(--route-bg);
-      border: 2px solid var(--route-border);
-    }
-
-    .chip.decision {
-      background: var(--decision-bg);
-      border: 2px solid var(--decision-border);
-      transform: rotate(45deg);
-      border-radius: 0;
-    }
-
-    .journey {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    .stage {
-      position: relative;
-      padding: 22px;
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: var(--shadow);
-    }
-
-    .stage-head {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      margin-bottom: 18px;
-    }
-
-    .stage-number {
-      flex: 0 0 auto;
-      min-width: 76px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: var(--client-bg);
-      border: 1px solid var(--client-border);
-      color: #2451a6;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      text-align: center;
-    }
-
-    .stage-title {
-      margin: 0 0 6px;
-      font-size: 24px;
-      line-height: 1.2;
-    }
-
-    .stage-desc {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .bpmn-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding-bottom: 6px;
-    }
-
-    .connector {
-      position: relative;
-      flex: 0 0 42px;
-      height: 3px;
-      background: #94a7bc;
-      border-radius: 999px;
-    }
-
-    .connector::after {
-      content: "";
-      position: absolute;
-      right: -8px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-top: 6px solid transparent;
-      border-bottom: 6px solid transparent;
-      border-left: 8px solid #94a7bc;
-    }
-
-    .node {
-      flex: 0 0 auto;
-      min-height: 82px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: var(--task-bg);
-      border: 2px solid var(--task-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 14px;
-      line-height: 1.35;
-    }
-
-    .node strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 14px;
-    }
-
-    .node.client {
-      background: var(--client-bg);
-      border-color: var(--client-border);
-    }
-
-    .node.route {
-      background: var(--route-bg);
-      border-color: var(--route-border);
-    }
-
-    .node.danger {
-      background: var(--danger-bg);
-      border-color: var(--danger-border);
-    }
-
-    .event {
-      width: 76px;
-      min-width: 76px;
-      height: 76px;
-      min-height: 76px;
-      padding: 0;
-      border-radius: 50%;
-      background: #2f63d8;
-      border: 0;
-      color: #ffffff;
-      font-weight: 700;
-      box-shadow: 0 12px 20px rgba(47, 99, 216, 0.22);
-    }
-
-    .gateway-wrap {
-      flex: 0 0 110px;
-      width: 110px;
-      height: 110px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .gateway {
-      width: 78px;
-      height: 78px;
-      transform: rotate(45deg);
-      border: 2px solid var(--decision-border);
-      background: var(--decision-bg);
-      box-shadow: 0 8px 16px rgba(216, 161, 4, 0.12);
-    }
-
-    .gateway-text {
-      position: absolute;
-      width: 110px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.25;
-      color: #8a6400;
-    }
-
-    .branches {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    .branch {
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: #fbfdff;
-    }
-
-    .branch h3 {
-      margin: 0 0 8px;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .branch p,
-    .branch ul,
-    .branch ol {
-      margin: 0;
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .branch ul,
-    .branch ol {
-      padding-left: 18px;
-    }
-
-    .branch li + li {
-      margin-top: 4px;
-    }
-
-    .branch.yes {
-      background: var(--greenish, #ebf8f0);
-      border-color: var(--task-border);
-    }
-
-    .branch.yes h3 {
-      color: #1e7b48;
-    }
-
-    .branch.no {
-      background: var(--route-bg);
-      border-color: var(--route-border);
-    }
-
-    .branch.no h3 {
-      color: #6641b0;
-    }
-
-    .branch.warn {
-      background: var(--danger-bg);
-      border-color: var(--danger-border);
-    }
-
-    .branch.warn h3 {
-      color: #b63a3a;
-    }
-
-    .arrow-down {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: -8px;
-      margin-bottom: -2px;
-      color: #6c7d91;
-      font-size: 28px;
-      font-weight: 700;
-    }
-
-    .final-states {
-      margin-top: 8px;
-      padding: 22px;
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.94);
-      box-shadow: var(--shadow);
-    }
-
-    .final-states h2 {
-      margin: 0 0 16px;
-      font-size: 24px;
-    }
-
-    .state-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .state-card {
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: #fbfdff;
-    }
-
-    .state-card strong {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 15px;
-    }
-
-    .state-card span {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .state-card.green {
-      background: #ebf8f0;
-      border-color: var(--task-border);
-    }
-
-    .state-card.purple {
-      background: var(--route-bg);
-      border-color: var(--route-border);
-    }
-
-    .state-card.red {
-      background: var(--danger-bg);
-      border-color: var(--danger-border);
-    }
-
-    @media (max-width: 1100px) {
-      .branches,
-      .state-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="page">
-    <span class="eyebrow">Clean BPMN Structure</span>
-    <h1>MMR / Peekaboo Client Journey</h1>
-    <p class="subtitle">
-      A full BPMN-style journey using all approved stages. Each stage is reduced to the essential process, decision, and route
-      so the full flow stays clean, connected, and easy to finish your task with.
-    </p>
-
-    <div class="legend" aria-label="Legend">
-      <div class="legend-item"><span class="chip client"></span> Client / input</div>
-      <div class="legend-item"><span class="chip task"></span> Main action</div>
-      <div class="legend-item"><span class="chip decision"></span> Decision</div>
-      <div class="legend-item"><span class="chip route"></span> Route / loop / transfer</div>
-    </div>
-
-    <div class="journey" aria-label="Full BPMN client journey">
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 1</div>
-          <div>
-            <h2 class="stage-title">Inquiry &amp; Availability Check</h2>
-            <p class="stage-desc">Start with the named maid, try alternatives twice, then collect requirements only if needed.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node event">Start</div>
-          <div class="connector"></div>
-          <div class="node client" style="width: 230px;">
-            <div><strong>Client asks about maid</strong>Availability, salary, cooking, childcare, pets, interview, start date.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 210px;">
-            <div><strong>Check availability</strong>MMR checks the original maid.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Maid available?</div>
-          </div>
-        </div>
-        <div class="branches">
-          <div class="branch yes">
-            <h3>YES</h3>
-            <p>Original maid stays in the flow and moves directly to <strong>Stage 2</strong>.</p>
-          </div>
-          <div class="branch no">
-            <h3>NO</h3>
-            <ol>
-              <li>Send shortlist #1</li>
-              <li>If no choice, send shortlist #2</li>
-              <li>If still no choice, collect detailed requirements</li>
-              <li>Send matching profiles</li>
-              <li>If match found - go to <strong>Stage 2</strong></li>
-              <li>If no match - choose <strong>CC Service</strong> or continue matching / lost lead</li>
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 2</div>
-          <div>
-            <h2 class="stage-title">Offer &amp; Package Presentation</h2>
-            <p class="stage-desc">Once a maid is selected, the commercial offer is sent.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node client" style="width: 180px;">
-            <div><strong>Selected maid</strong>Original or alternative profile.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 290px;">
-            <div><strong>Send package</strong>Profile, salary, 1-week trial, visa package pricing.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node route" style="width: 220px;">
-            <div><strong>Client reviews offer</strong>Commercial terms are now visible.</div>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 3</div>
-          <div>
-            <h2 class="stage-title">Questions &amp; Qualification</h2>
-            <p class="stage-desc">MMR answers questions, validates fit, and checks whether the client already has a maids.cc context.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node client" style="width: 200px;">
-            <div><strong>Client questions</strong>References, cooking, pets, start date, visa, interview.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 320px;">
-            <div><strong>Validate fit + client status</strong>Requirements, active contracts, previous maid, replacement, documents.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Interested in this maid?</div>
-          </div>
-        </div>
-        <div class="branches">
-          <div class="branch yes">
-            <h3>YES</h3>
-            <p>Proceed to <strong>Stage 4 - Budget &amp; Commercial Discussion</strong>.</p>
-          </div>
-          <div class="branch no">
-            <h3>NO</h3>
-            <p>Return to <strong>Stage 1 profile matching</strong>.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 4</div>
-          <div>
-            <h2 class="stage-title">Budget &amp; Commercial Discussion</h2>
-            <p class="stage-desc">Sales Supervisor handles salary, trial, visa, monthly charges, and budget fit.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node" style="width: 260px;">
-            <div><strong>Discuss pricing</strong>Salary, trial, visa, monthly fees, payment expectations.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Budget fits?</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node route" style="width: 320px;">
-            <div><strong>If budget does not fit</strong>Clarify price, offer cheaper profiles, nationalities, candidates, then CC Service.</div>
-          </div>
-        </div>
-        <div class="branches">
-          <div class="branch yes">
-            <h3>YES</h3>
-            <p>Proceed to <strong>Stage 5 - Interview &amp; Trial Decision</strong>.</p>
-          </div>
-          <div class="branch no">
-            <h3>NO</h3>
-            <p>Transfer to <strong>CC Service flow</strong> or end as <strong>Lost Lead</strong>.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 5</div>
-          <div>
-            <h2 class="stage-title">Interview &amp; Trial Decision</h2>
-            <p class="stage-desc">Interview if requested, then ask whether the client wants to proceed with the trial.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Interview requested?</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 290px;">
-            <div><strong>If yes</strong>Schedule Google Meet, conduct interview, send thank-you message.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Proceed to trial?</div>
-          </div>
-        </div>
-        <div class="branches">
-          <div class="branch yes">
-            <h3>YES</h3>
-            <p>Proceed to <strong>Stage 6 - Trial Readiness &amp; Payment</strong>.</p>
-          </div>
-          <div class="branch no">
-            <h3>NO / Needs Time</h3>
-            <p>Send availability reminder, move to follow-up sequence, then <strong>Dormant Lead</strong> if no return.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 6</div>
-          <div>
-            <h2 class="stage-title">Trial Readiness &amp; Payment</h2>
-            <p class="stage-desc">Only proceed when the client is ready to start within 7 days.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Ready within 7 days?</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 340px;">
-            <div><strong>If yes</strong>Collect EID, IBAN, address, start date, documents, then payment.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node route" style="width: 300px;">
-            <div><strong>After payment</strong>ERP case, trial scheduling, arrival arrangement, maid contact sharing.</div>
-          </div>
-        </div>
-        <div class="branches">
-          <div class="branch yes">
-            <h3>YES</h3>
-            <p>Trial officially starts. Proceed to <strong>Stage 7</strong>.</p>
-          </div>
-          <div class="branch no">
-            <h3>NO</h3>
-            <p>Send availability reminder and move the client to the <strong>follow-up queue</strong>.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 7</div>
-          <div>
-            <h2 class="stage-title">Trial Period</h2>
-            <p class="stage-desc">The maid arrives, feedback is collected, and the outcome of the trial is decided.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node" style="width: 250px;">
-            <div><strong>Trial starts</strong>Maid arrives and begins work.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 260px;">
-            <div><strong>Check-ins</strong>Feedback collected and performance monitored.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Trial successful?</div>
-          </div>
-        </div>
-        <div class="branches">
-          <div class="branch yes">
-            <h3>YES</h3>
-            <p>Proceed to <strong>Stage 10 - Contract &amp; Visa Process</strong>.</p>
-          </div>
-          <div class="branch no">
-            <h3>NO</h3>
-            <p>Proceed to <strong>Stage 8 - Resolution Flow</strong>.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 8</div>
-          <div>
-            <h2 class="stage-title">Resolution Flow</h2>
-            <p class="stage-desc">When the trial fails, the team first tries to retain the client with replacement or supervisor intervention.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node" style="width: 240px;">
-            <div><strong>Understand reason</strong>Cooking, childcare, refusal, mismatch, expectations, changed mind.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 210px;">
-            <div><strong>Offer replacement</strong>Suggest alternative maids.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="gateway-wrap">
-            <div class="gateway"></div>
-            <div class="gateway-text">Accept replacement?</div>
-          </div>
-        </div>
-        <div class="branches">
-          <div class="branch yes">
-            <h3>YES</h3>
-            <p>Return to <strong>Stage 1 profile matching</strong>.</p>
-          </div>
-          <div class="branch no">
-            <h3>NO</h3>
-            <p>Supervisor review, then decide whether to continue replacement or proceed to <strong>Stage 9</strong>.</p>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 9</div>
-          <div>
-            <h2 class="stage-title">Refund Procedure</h2>
-            <p class="stage-desc">Refund requests go through investigation, internal review, approval, processing, and confirmation.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node" style="width: 230px;">
-            <div><strong>Investigate case</strong>Understand what happened.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 220px;">
-            <div><strong>Internal review</strong>Supervisor approval and refund approval.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node route" style="width: 230px;">
-            <div><strong>Process refund</strong>Refund processing and client confirmation.</div>
-          </div>
-        </div>
-      </section>
-
-      <div class="arrow-down">↓</div>
-
-      <section class="stage">
-        <div class="stage-head">
-          <div class="stage-number">Stage 10</div>
-          <div>
-            <h2 class="stage-title">Contract &amp; Visa Process</h2>
-            <p class="stage-desc">If the trial succeeds, the client moves into contract activation and visa processing.</p>
-          </div>
-        </div>
-        <div class="bpmn-row">
-          <div class="node" style="width: 220px;">
-            <div><strong>Issue contract</strong>Contract issued and signed.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node" style="width: 250px;">
-            <div><strong>Collect remaining payment</strong>Move into visa processing.</div>
-          </div>
-          <div class="connector"></div>
-          <div class="node route" style="width: 300px;">
-            <div><strong>Complete visa flow</strong>Medical, Emirates ID, visa issuance, onboarding.</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="final-states">
-        <h2>Final End States</h2>
-        <div class="state-grid">
-          <div class="state-card green">
-            <strong>Contract Active</strong>
-            <span>Client successfully hires the maid.</span>
-          </div>
-          <div class="state-card purple">
-            <strong>Replacement Loop</strong>
-            <span>Client rejects the maid and returns to matching.</span>
-          </div>
-          <div class="state-card green">
-            <strong>Refund Completed</strong>
-            <span>Client exits after the refund is processed.</span>
-          </div>
-          <div class="state-card purple">
-            <strong>Dormant Lead</strong>
-            <span>Client delays the decision and stops responding.</span>
-          </div>
-          <div class="state-card red">
-            <strong>Lost Lead</strong>
-            <span>Client rejects options or the budget never fits.</span>
-          </div>
-        </div>
-      </section>
-    </div>
   </div>
 </body>
 </html>
